@@ -19,7 +19,7 @@ public class GameMenu {
     private int gameTitleY;
 
     private boolean isSettingsOpened    = false;
-    private boolean isSelectSpace    = false;
+    public boolean isSelectSpace    = false;
     private boolean isBackButtonClicked = false;
     private boolean isMainMenuActive;
 
@@ -37,7 +37,25 @@ public class GameMenu {
     private Rectangle settingsButton = new Rectangle(buttonX, settingsButtonY, buttonWidth, buttonHeight);
     private Rectangle exitButton     = new Rectangle(buttonX, exitButtonY, buttonWidth, buttonHeight);
     private Rectangle backButton     = new Rectangle(buttonX, backButtonY, buttonWidth, buttonHeight);
+    
+    Image chooseShip1, chooseShip2, chooseShip3,chooseShip4;
 
+    public int idSpace(int position_x, int positon_y) {
+    	if(400 < position_x && position_x < 502  && 100 < positon_y &&  positon_y < 204 ) {
+    		System.out.println("space 01");
+    	}
+    	if(700 < position_x && position_x < 800  && 100 < positon_y &&  positon_y < 221 ) {
+    		System.out.println("space 02");
+    	}
+    	if(400 < position_x && position_x < 487  && 300 < positon_y &&  positon_y < 404 ) {
+    		System.out.println("space 03");
+    	}
+    	if(700 < position_x && position_x < 887  && 300 < positon_y &&  positon_y < 404 ) {
+    		System.out.println("space 04");
+    	}
+    	return -1;
+	}
+    
     public Rectangle startButton(){
         return startButton;
     }
@@ -239,7 +257,6 @@ public class GameMenu {
                 g.drawRect(backButton.x - 2, backButton.y - 1, backButton.width + 2, backButton.height + 2);
                 g.setFont(new Font("Arial", Font.BOLD, 26));
                 g.drawString("BACK", buttonX + 85, backButtonY + padding);
-                Image chooseShip1, chooseShip2, chooseShip3,chooseShip4;
                 ImageIcon img1 = new ImageIcon("images/spacecraft.png");
                 ImageIcon img2 = new ImageIcon("images/playerTwo.png");
                 ImageIcon img3 = new ImageIcon("images/ship3.png");
@@ -252,7 +269,7 @@ public class GameMenu {
                 g.drawImage(chooseShip2,700, 100, null);
                 g.drawImage(chooseShip3,400, 300, null);
                 g.drawImage(chooseShip4,700, 300, null);
-
+                
             } else { //draw back Main menu
                 isMainMenuActive = true;
 

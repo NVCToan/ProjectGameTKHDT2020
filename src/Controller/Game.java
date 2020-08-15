@@ -235,6 +235,16 @@ public class Game extends JPanel implements ActionListener {
               
             }
             
+            if(menu.isSelectSpace) {
+            	menu.idSpace(mouseX, mouseY);
+            }
+            
+//            if (mouseX > menu.chooseShip1().x && mouseX < menu.settingsButton().x + menu.settingsButton().width &&
+//                    mouseY > menu.settingsButton().y && mouseY < menu.settingsButton().y + menu.settingsButton().height &&
+//                        !isGameStarted && menu.isMainMenuActive()){
+//
+//             }
+            
             if (mouseX > menu.settingsButton().x && mouseX < menu.settingsButton().x + menu.settingsButton().width &&
                 mouseY > menu.settingsButton().y && mouseY < menu.settingsButton().y + menu.settingsButton().height &&
                     !isGameStarted && menu.isMainMenuActive()){
