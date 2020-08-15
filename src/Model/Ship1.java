@@ -17,7 +17,6 @@ public class Ship1 extends PlayerShip {
         ImageIcon img = new ImageIcon("images/spacecraft.png");
         spaceShip     = img.getImage();
         fire = true;
-	
         this.x_pos = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
         this.y_pos = Toolkit.getDefaultToolkit().getScreenSize().height - spaceShip.getHeight(null) - 30;
         this.moveX = 3;
@@ -42,16 +41,16 @@ public class Ship1 extends PlayerShip {
 		 laserDelay=100 ;
 	        while (laserShots.size() < 2){
 	            laserShots.add(laser);
-	        }	
+	        }
+	        
 	        
 	}
 	public void setWeapon2Laser() {
 		Laser laser = new Laser(x_pos -20, y_pos-10);
-		
 		laserDelay=100 ;
 		while (laserShots.size() < 2){
 			laserShots.add(laser);
-		}		
+		}	
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {

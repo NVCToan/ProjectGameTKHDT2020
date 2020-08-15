@@ -25,7 +25,7 @@ import Model.SpaceCraftWeapon;
 import View.Background;
 import View.EnemiWeaponView;
 import View.GameMenu;
-
+import View.OverGameView;
 import View.ShipWeaponView;
 import View.StatsView;
 
@@ -50,7 +50,8 @@ public class Game extends JPanel implements ActionListener {
 
     //Background
     Background background;
-   
+   // OverGameView
+    OverGameView overGame;
     // Stats
     StatsView stats ;
     // Ship weapon
@@ -64,7 +65,7 @@ public class Game extends JPanel implements ActionListener {
     /* GAME BOOLEAN data */
     private boolean isGameLost;
     private boolean isGameStarted = false;
-
+    
     // get the screen dimensions
     public static int screenWidth  = Toolkit.getDefaultToolkit().getScreenSize().width;
     public static int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -263,8 +264,7 @@ public class Game extends JPanel implements ActionListener {
        background = new Background();
        stats = new StatsView();
        shipWeapon = new ShipWeaponView();
-//       enemiWeapon = new EnemiWeaponView();
-       
+       overGame = new OverGameView();
         shield    = new Shield(ship1.getX(), ship1.getY());
         /* spawn enemies */
         for (int i = 0; i < 10 ; ++i){
@@ -464,15 +464,13 @@ public class Game extends JPanel implements ActionListener {
                 	ship1.setLaserDelay();
                 }
                 if (ship1.isFire() && ship1.getBlasterDelay() == 0){
-                	blaserShotSound.play();
                 	 ship1.setWeapon1(new Blaster(ship1.getX(), ship1.getY()));
 
                 }
                 if (!ship1.isFire() && ship1.isSpecialWeapon() && ship1.getLaserDelay() == 0){
-                	bigBagShot.play();
                 	ship1.setWeapon2Laser();
                 }
-
+                
 //                if (player.isKeyLeft()){
 //                    player.setImage("images/spacecraft-turn-left.png");
 //                }
@@ -699,13 +697,7 @@ public class Game extends JPanel implements ActionListener {
             drawStats(graphics2D);
 
             if (isGameLost){
-                graphics2D.setFont(new Font("SanSerif", Font.BOLD, 50));
-                graphics2D.setColor(Color.red);
-                graphics2D.drawString("YOU LOSS", (screenWidth - 200) / 2, screenHeight / 3);
-                graphics2D.setFont(new Font("SanSerif", Font.BOLD, 16));
-                graphics2D.setColor(Color.GRAY);
-                graphics2D.drawString("Press space to play again", (screenWidth - 95) / 2, screenHeight / 2);
-                addKeyListener(new MyActionListener());
+            	overGame.paint(graphics2D);
             }
         }
     }
