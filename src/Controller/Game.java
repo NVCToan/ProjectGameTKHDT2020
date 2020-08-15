@@ -21,7 +21,11 @@ import Model.Ship2;
 import Model.SoundPlayer;
 import Model.SpaceCraft;
 import Model.SpaceCraftWeapon;
+import View.Background;
+import View.EnemiWeaponView;
 import View.GameMenu;
+import View.ShipWeaponView;
+import View.StatsView;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -38,27 +42,29 @@ public class Game extends JPanel implements ActionListener {
     private Ship1 ship1;
     private Ship2 ship2;
     private Shield shield;
-    private Image background;
     private Image backgroundMenu;
     private Timer time;
 
-    private int backgroundY;
-    private int bgMotion;
-    private int bgMotionSec;
-    private int playerOneScore;
-    private int playerTwoScore;
-
+    //Background
+    Background background;
+   
+    // Stats
+    StatsView stats ;
+    // Ship weapon
+    ShipWeaponView shipWeapon;
+    // EnemiWeapon
+//    EnemiWeaponView enemiWeapon;
     /* GAME VARIABLES */
     private int escapeCounter = 0;
-    public static int keyTwoCounter = 0;
+    private int keyTwoCounter = 0;
 
     /* GAME BOOLEAN data */
     private boolean isGameLost;
     private boolean isGameStarted = false;
 
     // get the screen dimensions
-    private int screenWidth  = Toolkit.getDefaultToolkit().getScreenSize().width;
-    private int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+    public static int screenWidth  = Toolkit.getDefaultToolkit().getScreenSize().width;
+    public static int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
     private DataConfig cfg = new DataConfig();
 
@@ -93,7 +99,7 @@ public class Game extends JPanel implements ActionListener {
      * Class for registering key presses
      */
     private class MyActionListener extends KeyAdapter {
-
+    	
         @Override
         public void keyPressed(KeyEvent e){
             ship1.keyPressed(e);
@@ -233,13 +239,18 @@ public class Game extends JPanel implements ActionListener {
             }
         }
     }
-
+    public Game(int a) {
+    	
+    }
     public Game(){
     	
         ship1    = new Ship1();
       
         ship2 = new Ship2();
-       
+       background = new Background();
+       stats = new StatsView();
+       shipWeapon = new ShipWeaponView();
+//       enemiWeapon = new EnemiWeaponView();
        
         shield    = new Shield(ship1.getX(), ship1.getY());
         /* spawn enemies */
@@ -255,8 +266,7 @@ public class Game extends JPanel implements ActionListener {
         addKeyListener(new MyActionListener());
         addMouseListener(new MouseEvents());
         addMouseMotionListener(new MouseEvents());
-        ImageIcon img = new ImageIcon("images/background.jpg");
-        background    = img.getImage();
+        
 
         // set the background for the game menu for different resolutions
         String menuBackground = "images/gameMenuBG.jpg";
@@ -268,11 +278,8 @@ public class Game extends JPanel implements ActionListener {
         ImageIcon bgImg = new ImageIcon(menuBackground);
         backgroundMenu  = bgImg.getImage();
 
-        bgMotion    = background.getHeight(null);
-        bgMotionSec = 0;
-        backgroundY = 0;
+      
 
-        playerOneScore = 0;
 
         isGameLost = false;
 
@@ -286,12 +293,7 @@ public class Game extends JPanel implements ActionListener {
     /**
      * Method for calculating background speed
      */
-    public void backgroundMovement(){
 
-        bgMotion    -= 1;
-        bgMotionSec += 1;
-        backgroundY += 1;
-    }
 
     /**
      * This function handles collision detection
@@ -318,7 +320,7 @@ public class Game extends JPanel implements ActionListener {
                 if (enemiesBounds.get(j).intersects(blasterBounds) && enemies.get(j).isAlive()){
                     enemies.get(j).setAlive(false);
                     temp.setVisible(false);
-                    playerOneScore += 10;
+                    stats.setPlayerOneScore(stats.getPlayerOneScore()+10);
                 }
             }
         }
@@ -332,7 +334,7 @@ public class Game extends JPanel implements ActionListener {
                 if (enemiesBounds.get(j).intersects(laserBounds) && enemies.get(j).isAlive()){
                     enemies.get(j).setAlive(false);
                     temp.setVisible(false);
-                    playerOneScore += 10;
+                    stats.setPlayerOneScore(stats.getPlayerOneScore()+10);
                 }
             }
         }
@@ -376,7 +378,7 @@ public class Game extends JPanel implements ActionListener {
                 if (enemiesBounds.get(j).intersects(blasterBounds) && enemies.get(j).isAlive()){
                     enemies.get(j).setAlive(false);
                     temp.setVisible(false);
-                    playerTwoScore += 10;
+                    stats.setPlayerTwoScore(stats.getPlayerTwoScore()+10);
                 }
             }
         }
@@ -390,7 +392,7 @@ public class Game extends JPanel implements ActionListener {
                 if (enemiesBounds.get(j).intersects(laserBounds) && enemies.get(j).isAlive()){
                     enemies.get(j).setAlive(false);
                     temp.setVisible(false);
-                    playerTwoScore += 10;
+                    stats.setPlayerTwoScore(stats.getPlayerTwoScore()+10);
                 }
             }
         }
@@ -503,7 +505,7 @@ public class Game extends JPanel implements ActionListener {
                 }
             }
 
-            backgroundMovement();
+            background.backgroundMovement();
 
             if (ship1.isAlive()){
                 shield.moveShield(ship1);
@@ -677,9 +679,8 @@ public class Game extends JPanel implements ActionListener {
             drawPlayers(graphics2D);
 
             /* draw shield */
-            if (shield.isShieldActive()){
-                graphics2D.drawImage(shield.getImage(), shield.shieldX(), shield.shieldY(), null);
-            }
+            
+            shield.paint(graphics2D);
 
             drawStats(graphics2D);
 
@@ -705,43 +706,24 @@ public class Game extends JPanel implements ActionListener {
     /**
      * Method for calculating and drawing the scrolling background
      */
-    public void drawBackground(Graphics g){
-        if ((backgroundY - 0) % (background.getHeight(null) * 2) == 0){
-            bgMotionSec = 0;
-        } else if ((backgroundY - background.getHeight(null)) % (background.getHeight(null) * 2) == 0){
-            bgMotion = (background.getHeight(null) * 2);
-        }
-        g.drawImage(background, 0, background.getHeight(null) - bgMotion, null);
-        if (backgroundY > 0){
-            g.drawImage(background, 0, -(background.getHeight(null) - bgMotionSec), null);
-        }
+    public void drawBackground(Graphics2D g2){
+    	background.paint(g2);
     }
 
     /**
      * Method for drawing weapons in the game
      */
-    public void drawWeapons(Graphics g){
+    public void drawWeapons(Graphics2D g2){
         if (ship1.isAlive()){
             /* paint blaster beams */
             /* create arraylist to store blaster shots array */
-            ArrayList blasterShots = ship1.getBlasterShots();
-            for (int i = 0; i < blasterShots.size(); ++i){
-                Blaster temp = (Blaster)blasterShots.get(i);
-                g.drawImage(temp.getBlasterImg(), temp.getXPos(), temp.getYPos(), null);
-            }
-            // paint laser
-            ArrayList<Laser> laserShots = ship1.getLaserShots();
-            for (int i = 0; i < laserShots.size(); ++i){
-                Laser temp = laserShots.get(i);
-                g.drawImage(temp.getLaserImg(), temp.getXPos(), temp.getYPos(), null);
-            }
+        	shipWeapon.paint(g2);
         }
-
         //enemies weapon
         for (int i = 0; i < fireShots.size(); ++i){
             SpaceCraftWeapon fire = fireShots.get(i);
             if (fire.isVisible()){
-                g.drawImage(fire.getEnemyFireImg(), fire.getXPos(), fire.getYPos(), null);
+                g2.drawImage(fire.getEnemyFireImg(), fire.getXPos(), fire.getYPos(), null);
             }
         }
 
@@ -751,14 +733,14 @@ public class Game extends JPanel implements ActionListener {
             for (int i = 0; i < blasterShotsTwo.size(); ++i){
                 Blaster temp = (Blaster)blasterShotsTwo.get(i);
                 temp.setImage("images/blasterTwo.png");
-                g.drawImage(temp.getBlasterImg(), temp.getXPos(), temp.getYPos(), null);
+                g2.drawImage(temp.getBlasterImg(), temp.getXPos(), temp.getYPos(), null);
             }
             // paint laser
             ArrayList<Laser> laserShotsTwo = ship2.getLaserShots();
             for (int i = 0; i < laserShotsTwo.size(); ++i){
                 Laser temp = laserShotsTwo.get(i);
                 temp.setImage("images/laserTwo.png");
-                g.drawImage(temp.getLaserImg(), temp.getXPos(), temp.getYPos(), null);
+                g2.drawImage(temp.getLaserImg(), temp.getXPos(), temp.getYPos(), null);
             }
         }
     }
@@ -785,21 +767,22 @@ public class Game extends JPanel implements ActionListener {
     /**
      * Method for drawing game statistics
      */
-    public void drawStats(Graphics g){
-        g.setFont(new Font("SanSerif", Font.BOLD, 20));
-        g.setColor(Color.GREEN);
-        g.drawString("PLAYER ONE", screenWidth - 200, 30);
-        g.drawString("POINTS: " + playerOneScore, screenWidth - 200, 70);
-        if (shield.isShieldActive()){
-            g.drawString("SHIELD: ACTIVE", screenWidth - 200, 100);
-        } else {
-            g.drawString("SHIELD: DISABLED", screenWidth - 200, 100);
-        }
-        // Player 2
-        if (ship2.isAlive() || keyTwoCounter > 0){
-            g.drawString("PLAYER TWO", 5, 30);
-            g.drawString("POINTS: " + playerTwoScore, 5, 70);
-        }
+    public void drawStats(Graphics2D g2){
+//        g.setFont(new Font("SanSerif", Font.BOLD, 20));
+//        g.setColor(Color.GREEN);
+//        g.drawString("PLAYER ONE", screenWidth - 200, 30);
+//        g.drawString("POINTS: " + stats.getPlayerOneScore(), screenWidth - 200, 70);
+//        if (shield.isShieldActive()){
+//            g.drawString("SHIELD: ACTIVE", screenWidth - 200, 100);
+//        } else {
+//            g.drawString("SHIELD: DISABLED", screenWidth - 200, 100);
+//        }
+//        // Player 2
+//        if (ship2.isAlive() || keyTwoCounter > 0){
+//            g.drawString("PLAYER TWO", 5, 30);
+//            g.drawString("POINTS: " + stats.getPlayerTwoScore(), 5, 70);
+//        }
+    	stats.paint(g2);
     }
 
     /**
@@ -810,21 +793,21 @@ public class Game extends JPanel implements ActionListener {
         /* save the data */
         cfg.player_one_x_pos  = ship1.getX();
         cfg.player_one_y_pos  = ship1.getY();
-        cfg.player_one_score  = playerOneScore;
+        cfg.player_one_score  = stats.getPlayerOneScore();
         cfg.player_one_shield = shield.isShieldActive();
 
         cfg.player_two_x_pos = ship2.getX();
         cfg.player_two_y_pos = ship2.getY();
-        cfg.player_two_score = playerTwoScore;
+        cfg.player_two_score = stats.getPlayerTwoScore();
 
         cfg.key_two_counter  = keyTwoCounter;
 
         cfg.is_player_one_alive = ship1.isAlive();
         cfg.is_player_two_alive = ship2.isAlive();
 
-        cfg.background_position   = backgroundY;
-        cfg.background_motion     = bgMotion;
-        cfg.background_motion_sec = bgMotionSec;
+        cfg.background_position   = background.getBackgroundY();
+        cfg.background_motion     = background.getBgMotion();
+        cfg.background_motion_sec = background.getBgMotionSec();
 
         cfg.is_game_lost = false;
 
@@ -849,21 +832,21 @@ public class Game extends JPanel implements ActionListener {
                 /* load the data */
                 ship1.setX(cfg.player_one_x_pos);
                 ship1.setY(cfg.player_one_y_pos);
-                playerOneScore = cfg.player_one_score;
+                stats.setPlayerOneScore(cfg.player_one_score);
                 shield.setShield(cfg.player_one_shield);
 
                 ship2.setX(cfg.player_two_x_pos);
                 ship2.setY(cfg.player_two_y_pos);
-                playerTwoScore = cfg.player_two_score;
+                stats.setPlayerTwoScore(cfg.player_two_score);
 
                 keyTwoCounter = cfg.key_two_counter;
 
                 ship1.setAlive(cfg.is_player_one_alive);
                 ship2.setAlive(cfg.is_player_two_alive);
 
-                backgroundY = cfg.background_position;
-                bgMotion    = cfg.background_motion;
-                bgMotionSec = cfg.background_motion_sec;
+                background.setBackgroundY(cfg.background_position); 
+                background.setBgMotion(cfg.background_motion)    ;
+                background.setBgMotionSec(cfg.background_motion_sec);
 
                 isGameLost = cfg.is_game_lost;
             }
@@ -872,5 +855,15 @@ public class Game extends JPanel implements ActionListener {
             in.close();
         }
         catch(IOException e){}
+    }
+    
+    public int getScreenWidth() {
+    	return screenWidth;
+    }
+    public int getScreenHeight() {
+    	return screenHeight;
+    }
+    public int getKeyTwoCounter() {
+    	return keyTwoCounter;
     }
 }

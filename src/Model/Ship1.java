@@ -9,7 +9,9 @@ import javax.swing.ImageIcon;
 import Controller.Game;
 
 public class Ship1 extends PlayerShip {
-
+	public Ship1(String nullContrucstor) {
+		
+	}
 	public Ship1(){
 
         ImageIcon img = new ImageIcon("images/spacecraft.png");

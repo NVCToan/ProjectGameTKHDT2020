@@ -13,8 +13,10 @@ public class Shield {
     private int y_pos;
     private Image shield;
 
-    boolean shieldActive;
-
+    public static boolean shieldActive;
+  public Shield() {
+	  
+  }
     public Shield(int x, int y){
         this.x_pos = x;
         this.y_pos = y;
@@ -69,6 +71,11 @@ public class Shield {
             case KeyEvent.VK_T:
                 shieldActive = false;
                 break;
+        }
+    }
+    public void paint(Graphics2D g2) {
+        if (isShieldActive()){
+        	g2.drawImage(getImage(), shieldX(),shieldY(), null);
         }
     }
 }

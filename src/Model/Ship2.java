@@ -9,9 +9,12 @@ import javax.swing.ImageIcon;
 import Controller.Game;
 
 public class Ship2 extends PlayerShip {
-
+	Game game;
+	public Ship2(String nullContrucstor) {
+		
+	}
 	public Ship2(){
-
+		game = new Game(1);
         ImageIcon img = new ImageIcon("images/playerTwo.png");
         spaceShip     = img.getImage();
 
@@ -91,7 +94,7 @@ public void paint(Graphics2D g2) {
    	
     if (isAlive()){
         g2.drawImage(getImage(),getX(), getY(), null);
-    } else if (!isAlive() && Game.keyTwoCounter > 0){
+    } else if (!isAlive() && game.getKeyTwoCounter() > 0){
     	setImage("images/explosion.gif");
         g2.drawImage(getImage(), getX(), getY(), null);
     }
