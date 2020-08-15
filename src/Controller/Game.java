@@ -228,9 +228,10 @@ public class Game extends JPanel implements ActionListener {
             if (mouseX > menu.startButton().x && mouseX <  menu.startButton().x +  menu.startButton().width &&
                 mouseY >  menu.startButton().y && mouseY <  menu.startButton().y +  menu.startButton().height &&
                     !isGameStarted && menu.isMainMenuActive()){
-            	
-                isGameStarted = true;
-                playGameSound.play();
+
+            	menu.setSelectSpace(true);
+//                isGameStarted = true;
+//                playGameSound.play();
               
             }
             

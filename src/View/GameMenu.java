@@ -19,6 +19,7 @@ public class GameMenu {
     private int gameTitleY;
 
     private boolean isSettingsOpened    = false;
+    private boolean isSelectSpace    = false;
     private boolean isBackButtonClicked = false;
     private boolean isMainMenuActive;
 
@@ -56,6 +57,10 @@ public class GameMenu {
     public void setSettingsOpened(boolean is){
         isSettingsOpened = is;
     }
+    
+    public void setSelectSpace(boolean is){
+    	isSelectSpace = is;
+    }
 
     public void setBackClicked(boolean is){
         isBackButtonClicked = is;
@@ -79,7 +84,7 @@ public class GameMenu {
     public void drawGameMenu(Graphics g, Image background, int padding,
                              boolean isStartHovered, boolean isExitHovered,
                              boolean isSettingsHovered, boolean isBackHovered){
-        if (!isSettingsOpened){
+        if (!isSettingsOpened && !isSelectSpace){
 
             isMainMenuActive = true;
 
@@ -126,8 +131,8 @@ public class GameMenu {
             g.drawString("SETTINGS", buttonX + 60, settingsButtonY + padding);
             g.drawString("EXIT", buttonX + 95, exitButtonY + padding);
 
-        } else {  // draw SETTINGS MENU
-            if (!isBackButtonClicked){
+        } else if(isSettingsOpened) {  // draw SETTING
+        	if (!isBackButtonClicked){
 
                 isMainMenuActive = false;
 
@@ -176,7 +181,6 @@ public class GameMenu {
                 g.drawString("BACK", buttonX + 85, backButtonY + padding);
 
             } else { //draw back Main menu
-
                 isMainMenuActive = true;
 
                 g.setColor(Color.BLACK);
@@ -209,6 +213,67 @@ public class GameMenu {
                 isBackButtonClicked = false;
                 isSettingsOpened    = false;
             }
-        }
+        } else if (isSelectSpace) { // draw SPACE
+        	if (!isBackButtonClicked){
+
+                isMainMenuActive = false;
+
+                g.drawImage(background, 0, 0, null);
+                g.setColor(new Color(1, 14, 22));
+                int width = screenWidth - 400;
+                g.fillRect(200, 0, width, screenHeight);
+
+                if (!isBackHovered){
+                    g.setColor(new Color(1, 14, 22));
+                } else {
+                    g.setColor(new Color(56, 14, 112, 223));
+                }
+                g.fillRect(backButton.x, backButton.y, backButton.width, backButton.height);
+                // draw Controls
+                g.setColor(new Color(1, 178, 241));
+                g.setFont(new Font("Arial", Font.BOLD, 26));
+                g.drawString("SELLECT SPACE", (width+200)/2, 40);
+                //
+                
+                // back to main menu button
+                g.drawRect(backButton.x - 2, backButton.y - 1, backButton.width + 2, backButton.height + 2);
+                g.setFont(new Font("Arial", Font.BOLD, 26));
+                g.drawString("BACK", buttonX + 85, backButtonY + padding);
+
+            } else { //draw back Main menu
+                isMainMenuActive = true;
+
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, screenWidth, screenHeight);
+                g.drawImage(background, 0, 0, null);
+
+                g.drawImage(gameTitle, gameTitleX, gameTitleY,
+                        gameTitle.getWidth(null), gameTitle.getHeight(null), null);
+
+                /* draw the frame around the buttons */
+                g.setColor(new Color(1, 178, 241));
+                g.drawRect(startButton.x - 2, startButton.y - 1, startButton.width + 2, startButton.height + 2);
+                g.drawRect(settingsButton.x - 2, settingsButton.y - 1, settingsButton.width + 2, settingsButton.height + 2);
+                g.drawRect(exitButton.x - 2, exitButton.y - 1, exitButton.width + 2, exitButton.height + 2);
+
+                /* draw the buttons */
+                g.setColor(new Color(1, 14, 22));
+                g.fillRect(startButton.x, startButton.y, startButton.width, startButton.height);
+                g.fillRect(settingsButton.x, settingsButton.y, settingsButton.width, settingsButton.height);
+                g.fillRect(exitButton.x, exitButton.y, exitButton.width, exitButton.height);
+
+                /* draw names of buttons */
+                g.setFont(new Font("Arial", Font.BOLD, 26));
+                g.setColor(new Color(1, 178, 241));
+
+                g.drawString("START", buttonX + 80, startButtonY + padding);
+                g.drawString("SETTINGS", buttonX + 60, settingsButtonY + padding);
+                g.drawString("EXIT", buttonX + 95, exitButtonY + padding);
+
+                isBackButtonClicked = false;
+                isSelectSpace = false;
+                isSettingsOpened    = false;
+            }
+		}
     }
 }
