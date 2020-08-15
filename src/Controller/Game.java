@@ -24,8 +24,10 @@ import Model.SpaceCraftWeapon;
 import View.Background;
 import View.EnemiWeaponView;
 import View.GameMenu;
+
 import View.ShipWeaponView;
 import View.StatsView;
+
 
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -136,6 +138,9 @@ public class Game extends JPanel implements ActionListener {
             	}else superBuff=0;
                    
             }
+            if(isGameLost == true && e.getKeyCode() == KeyEvent.VK_SPACE) {
+            	System.exit(0);
+            }
         }
 
         @Override
@@ -219,6 +224,7 @@ public class Game extends JPanel implements ActionListener {
                 playGameSound.playMusicBackground();
               
             }
+            
             if (mouseX > menu.settingsButton().x && mouseX < menu.settingsButton().x + menu.settingsButton().width &&
                 mouseY > menu.settingsButton().y && mouseY < menu.settingsButton().y + menu.settingsButton().height &&
                     !isGameStarted && menu.isMainMenuActive()){
@@ -287,7 +293,7 @@ public class Game extends JPanel implements ActionListener {
 
         time = new Timer(2, this);
         time.start();
-      backgroundSound.play();
+        backgroundSound.play();
     }
 
     /**
@@ -687,7 +693,11 @@ public class Game extends JPanel implements ActionListener {
             if (isGameLost){
                 graphics2D.setFont(new Font("SanSerif", Font.BOLD, 50));
                 graphics2D.setColor(Color.red);
-                graphics2D.drawString("YOU SUCK", (screenWidth - 200) / 2, screenHeight / 2);
+                graphics2D.drawString("YOU LOSS", (screenWidth - 200) / 2, screenHeight / 3);
+                graphics2D.setFont(new Font("SanSerif", Font.BOLD, 16));
+                graphics2D.setColor(Color.GRAY);
+                graphics2D.drawString("Enter to continute", (screenWidth - 95) / 2, screenHeight / 2);
+                addKeyListener(new MyActionListener());
             }
         }
     }
