@@ -215,7 +215,7 @@ public class GameMenu {
             }
         } else if (isSelectSpace) { // draw SPACE
         	if (!isBackButtonClicked){
-
+        		
                 isMainMenuActive = false;
 
                 g.drawImage(background, 0, 0, null);
@@ -239,6 +239,19 @@ public class GameMenu {
                 g.drawRect(backButton.x - 2, backButton.y - 1, backButton.width + 2, backButton.height + 2);
                 g.setFont(new Font("Arial", Font.BOLD, 26));
                 g.drawString("BACK", buttonX + 85, backButtonY + padding);
+                Image chooseShip1, chooseShip2, chooseShip3,chooseShip4;
+                ImageIcon img1 = new ImageIcon("images/spacecraft.png");
+                ImageIcon img2 = new ImageIcon("images/playerTwo.png");
+                ImageIcon img3 = new ImageIcon("images/ship3.png");
+                ImageIcon img4 = new ImageIcon("images/ship4.png");
+                chooseShip1 = img1.getImage();
+                chooseShip2 = img2.getImage();
+                chooseShip3 = img3.getImage();
+                chooseShip4 = img4.getImage();
+                g.drawImage(chooseShip1,400, 100, null);
+                g.drawImage(chooseShip2,700, 100, null);
+                g.drawImage(chooseShip3,400, 300, null);
+                g.drawImage(chooseShip4,700, 300, null);
 
             } else { //draw back Main menu
                 isMainMenuActive = true;
