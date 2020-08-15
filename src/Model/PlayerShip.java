@@ -15,7 +15,7 @@ public abstract class PlayerShip {
     protected int moveY;
     protected int moveYdead;
 
-    protected int blasterDelay = 20;
+    protected int blasterDelay = 100;
     protected int laserDelay = 100;
     
     /* container to hold blaster shots */

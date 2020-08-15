@@ -13,6 +13,7 @@ package Controller;
 import javax.swing.*;
 
 import Model.Blaster;
+import Model.CacheDataLoader;
 import Model.DataConfig;
 import Model.Laser;
 import Model.Shield;
@@ -80,6 +81,8 @@ public class Game extends JPanel implements ActionListener {
     /* GAME CONSTANTS */
     private final int ENEMY_SPEED        = 2;
     private final int BUTTON_PADDING_TOP = 35;
+    
+    
     private final int ENEMIES_SPAWN_Y    = 6000;
 
     /* MENU BUTTONS AND VALUES*/
@@ -91,11 +94,11 @@ public class Game extends JPanel implements ActionListener {
     private boolean isBackButtonHovered;
 
     //BackgroundSound
-    static SoundPlayer  backgroundSound = new SoundPlayer(new File("sounds/menusong.wav"));
-    static SoundPlayer  playGameSound = new SoundPlayer(new File("sounds/gameplay.wav"));
+    private SoundPlayer  menuSounds = CacheDataLoader.getInstance().getSound("menusound");
+    static SoundPlayer  playGameSound  = CacheDataLoader.getInstance().getSound("playgamesound");
 	
-    public static SoundPlayer blaserShotSound = new SoundPlayer(new File("sounds/blasershot.wav"));
-    public static SoundPlayer bigBagShot = new SoundPlayer(new File("sounds/bigbagshot.wav"));
+    public static SoundPlayer blaserShotSound = CacheDataLoader.getInstance().getSound("blasershot");
+    public static SoundPlayer bigBagShot = CacheDataLoader.getInstance().getSound("bigbagshot");
     
     /**
      * Class for registering key presses
@@ -138,11 +141,16 @@ public class Game extends JPanel implements ActionListener {
             	}else superBuff=0;
                    
             }
+          
             if(isGameLost == true && e.getKeyCode() == KeyEvent.VK_SPACE) {
-            	System.exit(0);
+            	resetGame();
             }
         }
-
+        public void resetGame() {
+       	 ship1    = new Ship1();
+            isGameLost = false;
+            isGameStarted = true;
+   	}
         @Override
         public void keyReleased(KeyEvent e){
             ship1.keyReleased(e);
@@ -219,9 +227,9 @@ public class Game extends JPanel implements ActionListener {
             if (mouseX > menu.startButton().x && mouseX <  menu.startButton().x +  menu.startButton().width &&
                 mouseY >  menu.startButton().y && mouseY <  menu.startButton().y +  menu.startButton().height &&
                     !isGameStarted && menu.isMainMenuActive()){
-
+            	
                 isGameStarted = true;
-                playGameSound.playMusicBackground();
+                playGameSound.play();
               
             }
             
@@ -249,7 +257,6 @@ public class Game extends JPanel implements ActionListener {
     	
     }
     public Game(){
-    	
         ship1    = new Ship1();
       
         ship2 = new Ship2();
@@ -293,7 +300,7 @@ public class Game extends JPanel implements ActionListener {
 
         time = new Timer(2, this);
         time.start();
-        backgroundSound.play();
+        menuSounds.play();
     }
 
     /**
@@ -436,7 +443,6 @@ public class Game extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e){
 
         if (isGameStarted){
-        	
             if (ship1.isAlive()){
                 if (ship1.isKeyLeft() && ship1.getX() > 20){
                 	ship1.moveLeft();
@@ -458,11 +464,13 @@ public class Game extends JPanel implements ActionListener {
                 	ship1.setLaserDelay();
                 }
                 if (ship1.isFire() && ship1.getBlasterDelay() == 0){
+                	blaserShotSound.play();
                 	 ship1.setWeapon1(new Blaster(ship1.getX(), ship1.getY()));
 
                 }
                 if (!ship1.isFire() && ship1.isSpecialWeapon() && ship1.getLaserDelay() == 0){
-                	 ship1.setWeapon2Laser();
+                	bigBagShot.play();
+                	ship1.setWeapon2Laser();
                 }
 
 //                if (player.isKeyLeft()){
@@ -551,7 +559,7 @@ public class Game extends JPanel implements ActionListener {
                 if (i % 2 == 0 && enemies.get(i).getY() > 0){
                     if (enemies.get(i).getX() > 0 && enemies.get(i).getX() < 400){
                         enemies.get(i).moveRight();
-                    }
+                    } 
                     if (enemies.get(i).getX() > 500 && enemies.get(i).getX() < screenWidth - 60){
                         enemies.get(i).moveLeft();
                     }
@@ -675,7 +683,7 @@ public class Game extends JPanel implements ActionListener {
            
 
         } else {
-        	backgroundSound.stop();
+        	menuSounds.stop();
             drawBackground(graphics2D);
 
             drawWeapons(graphics2D);
@@ -696,7 +704,7 @@ public class Game extends JPanel implements ActionListener {
                 graphics2D.drawString("YOU LOSS", (screenWidth - 200) / 2, screenHeight / 3);
                 graphics2D.setFont(new Font("SanSerif", Font.BOLD, 16));
                 graphics2D.setColor(Color.GRAY);
-                graphics2D.drawString("Enter to continute", (screenWidth - 95) / 2, screenHeight / 2);
+                graphics2D.drawString("Press space to play again", (screenWidth - 95) / 2, screenHeight / 2);
                 addKeyListener(new MyActionListener());
             }
         }

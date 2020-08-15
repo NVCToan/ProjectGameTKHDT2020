@@ -1,0 +1,6 @@
+4
+
+menusound sounds/menusong.wav
+playgamesound sounds/gameplay.wav
+blasershot sounds/blasershot.wav
+bigbagshot sounds/bigbagshot.wav

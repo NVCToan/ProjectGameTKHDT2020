@@ -17,7 +17,7 @@ public class Ship1 extends PlayerShip {
         ImageIcon img = new ImageIcon("images/spacecraft.png");
         spaceShip     = img.getImage();
         fire = true;
-       
+	
         this.x_pos = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
         this.y_pos = Toolkit.getDefaultToolkit().getScreenSize().height - spaceShip.getHeight(null) - 30;
         this.moveX = 3;
@@ -68,16 +68,13 @@ public class Ship1 extends PlayerShip {
 	            keyDown = true;
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_Q){
-	            
 	            	setFire(true); 
+	            	
 
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_W){
 	            specialWeapon = true;
-	            if(laserDelay!=0) {
-	            	
-	            	Game.bigBagShot.play();
-	            }
+	         
 	        }		
 	}
 	@Override
@@ -96,6 +93,7 @@ public class Ship1 extends PlayerShip {
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_Q){
 	            setFire(false);
+
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_W){
 	            specialWeapon = false;
