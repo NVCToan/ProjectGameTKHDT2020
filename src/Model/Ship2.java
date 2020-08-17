@@ -9,16 +9,15 @@ import javax.swing.ImageIcon;
 import Controller.Game;
 
 public class Ship2 extends PlayerShip {
-	Game game;
 	public Ship2(String nullContrucstor) {
 		
 	}
 	public Ship2(){
-		game = new Game(1);
-        ImageIcon img = new ImageIcon("images/playerTwo.png");
-        spaceShip     = img.getImage();
 
-        this.x_pos = Toolkit.getDefaultToolkit().getScreenSize().width / 2 - 300;
+        ImageIcon img = new ImageIcon("images/ship2.png");
+        spaceShip     = img.getImage();
+        fire = true;
+        this.x_pos = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
         this.y_pos = Toolkit.getDefaultToolkit().getScreenSize().height - spaceShip.getHeight(null) - 30;
         this.moveX = 3;
         this.moveY = 3;
@@ -37,72 +36,76 @@ public class Ship2 extends PlayerShip {
 
 	@Override
 	public void setWeapon2(IWeapon weapon1) {
-		 Laser laser = new Laser(x_pos, y_pos);
-
+		 Laser laser = new Laser(x_pos -20, y_pos-10);
+		 
+		 laserDelay=100 ;
 	        while (laserShots.size() < 2){
 	            laserShots.add(laser);
-	        }		
+	        }
+	        
+	        
+	}
+	public void setWeapon2Laser() {
+		Laser laser = new Laser(x_pos -20, y_pos-10);
+		laserDelay=100 ;
+		while (laserShots.size() < 2){
+			laserShots.add(laser);
+		}	
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
+		 if (e.getKeyCode() == KeyEvent.VK_LEFT){
+	            keyLeft = true;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
+	            keyRight = true;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_UP){
+	            keyUp = true;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_DOWN){
+	            keyDown = true;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_Q){
+	            	setFire(true); 
+	            	
 
-		        if (e.getKeyCode() == KeyEvent.VK_A){
-		            keyLeft = true;
-		        }
-		        if (e.getKeyCode() == KeyEvent.VK_D){
-		            keyRight = true;
-		        }
-		        if (e.getKeyCode() == KeyEvent.VK_W){
-		            keyUp = true;
-		        }
-		        if (e.getKeyCode() == KeyEvent.VK_S){
-		            keyDown = true;
-		        }
-		        if (e.getKeyCode() == KeyEvent.VK_SPACE){
-		            fire = true;
-		        }
-		        if (e.getKeyCode() == KeyEvent.VK_G){
-		            specialWeapon = true;
-		        }
-
-		
-		
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_W){
+	            specialWeapon = true;
+	         
+	        }		
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_A){
-            keyLeft = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_D){
-            keyRight = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_W){
-            keyUp = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_S){
-            keyDown = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE){
-            fire = false;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_G){
-            specialWeapon = false;
-        }		
+		 if (e.getKeyCode() == KeyEvent.VK_LEFT){
+	            keyLeft = false;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
+	            keyRight = false;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_UP){
+	            keyUp = false;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_DOWN){
+	            keyDown = false;
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_Q){
+	            setFire(false);
+
+	        }
+	        if (e.getKeyCode() == KeyEvent.VK_W){
+	            specialWeapon = false;
+	        }			
 	}
 
 public void paint(Graphics2D g2) {
-   	
-    if (isAlive()){
-        g2.drawImage(getImage(),getX(), getY(), null);
-    } else if (!isAlive() && game.getKeyTwoCounter() > 0){
-    	setImage("images/explosion.gif");
-        g2.drawImage(getImage(), getX(), getY(), null);
-    }
-}
-@Override
-public void setWeapon2Laser() {
-	// TODO Auto-generated method stub
-	
+	   if (isAlive()){
+		   g2.drawImage(getImage(), getX(), getY(), null);
+     } else {
+     	setImage("images/explosion.gif");
+     	g2.drawImage(getImage(), getX(), getY(), null);
+     }
 }
 
 }

@@ -21,6 +21,7 @@ import Model.Shield;
 import Model.Ship1;
 import Model.Ship2;
 import Model.Ship3;
+import Model.Ship4;
 import Model.SoundPlayer;
 import Model.SpaceCraft;
 import Model.SpaceCraftWeapon;
@@ -48,6 +49,7 @@ public class Game extends JPanel implements ActionListener {
     private Ship1 ship1;
     private Ship2 ship2;
     private Ship3 ship3;
+    private Ship4 ship4;
     private Shield shield;
     private Image backgroundMenu;
     private Timer time;
@@ -120,6 +122,7 @@ public class Game extends JPanel implements ActionListener {
             ship1.keyPressed(e);
             ship2.keyPressed(e);
             ship3.keyPressed(e);
+            ship4.keyPressed(e);
             shield.keyPressed(e);
          
 
@@ -166,6 +169,7 @@ public class Game extends JPanel implements ActionListener {
             ship1.keyReleased(e);
             ship2.keyReleased(e);
             ship3.keyReleased(e);
+            ship4.keyReleased(e);
             shield.keyPressed(e);
 
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE && escapeCounter > 0){
@@ -286,6 +290,7 @@ public class Game extends JPanel implements ActionListener {
         ship1    = new Ship1();
         ship2 = new Ship2();
         ship3 = new Ship3();
+        ship4 = new Ship4();
         shield    = new Shield(ship1.getX(), ship1.getY());
        background = new Background();
        stats = new StatsView();
@@ -349,7 +354,11 @@ public class Game extends JPanel implements ActionListener {
 		case 3:
 			blasterShots = ship3.getBlasterShots();
 			playerBounds   = ship3.getBounds();			break ;
-
+		
+		case 4:
+			blasterShots = ship4.getBlasterShots();
+			playerBounds   = ship4.getBounds();			break ;
+			
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + idToStart);
 		}
@@ -520,12 +529,43 @@ public class Game extends JPanel implements ActionListener {
                 		
                 		ship1.setImage("images/spacecraft-super1.png");
                 	}
-                	else ship1.setImage("images/spacecraft.png");
+                	else ship1.setImage("images/ship1.png");
                     
                     
                 }
             }
+            //Ship2
+            if (ship2.isAlive()){
+                if (ship2.isKeyLeft() && ship2.getX() > 20){
+                	ship2.moveLeft();
+                }
+                if (ship2.isKeyRight() && ship2.getX() < (screenWidth - 116)){
+                	ship2.moveRight();
+                }
+                if (ship2.isKeyUp() && ship2.getY() > 20){
+                	ship2.moveForward();
+                }
+                if (ship2.isKeyDown() && ship2.getY() < (screenHeight - 118)){
+                	ship2.moveBack();
+                }
 
+                if (ship2.getBlasterDelay() > 0){
+                	ship2.setBlasterDelay();
+                }
+                if (ship2.getLaserDelay() > 0){
+                	ship2.setLaserDelay();
+                }
+                if (ship2.isFire() && ship2.getBlasterDelay() == 0){
+                	ship2.setWeapon1(new Blaster(ship2.getX(), ship2.getY()));
+
+                }
+                if (!ship2.isFire() && ship2.isSpecialWeapon() && ship2.getLaserDelay() == 0){
+                	ship2.setWeapon2Laser();
+                }
+            
+                
+            }
+            // End ship2
             //ship3
             
             if (ship3.isAlive()){
@@ -558,39 +598,44 @@ public class Game extends JPanel implements ActionListener {
             
                 
             }
-            //end ship3
-            if (ship2.isAlive()){
-                if (ship2.isKeyLeft() && ship2.getX() > 20){
-                	ship2.moveLeft();
-                }
-                if (ship2.isKeyRight() && ship2.getX() < (screenWidth - 116)){
-                	ship2.moveRight();
-                }
-                if (ship2.isKeyUp() && ship2.getY() > 20){
-                	ship2.moveForward();
-                }
-                if (ship2.isKeyDown() && ship2.getY() < (screenHeight - 118)){
-                	ship2.moveBack();
-                }
-
-                if (ship2.getBlasterDelay() > 0){
-                	ship2.setBlasterDelay();
-
-                }
-                if (ship2.isFire() && ship2.getBlasterDelay() == 0){
-                	
-                	 ship2.setWeapon1(new Blaster(ship2.getX(), ship2.getY()));
-                     
-
-                }
-                if (ship2.isSpecialWeapon()){
-                	 ship2.setWeapon2(new Laser(ship2.getX(), ship2.getY()));
-                }
+            // End ship3
+            // Ship4
+            if (ship4.isAlive()){
+            	if (ship4.isKeyLeft() && ship4.getX() > 20){
+            		ship4.moveLeft();
+            	}
+            	if (ship4.isKeyRight() && ship4.getX() < (screenWidth - 116)){
+            		ship4.moveRight();
+            	}
+            	if (ship4.isKeyUp() && ship4.getY() > 20){
+            		ship4.moveForward();
+            	}
+            	if (ship4.isKeyDown() && ship4.getY() < (screenHeight - 118)){
+            		ship4.moveBack();
+            	}
+            	
+            	if (ship4.getBlasterDelay() > 0){
+            		ship4.setBlasterDelay();
+            	}
+            	if (ship4.getLaserDelay() > 0){
+            		ship4.setLaserDelay();
+            	}
+            	if (ship4.isFire() && ship4.getBlasterDelay() == 0){
+            		ship4.setWeapon1(new Blaster(ship4.getX(), ship4.getY()));
+            		
+            	}
+            	if (!ship4.isFire() && ship4.isSpecialWeapon() && ship4.getLaserDelay() == 0){
+            		ship4.setWeapon2Laser();
+            	}
+            	
+            	
             }
+            //end ship4
+           
 
             background.backgroundMovement();
 
-            if (ship1.isAlive() || ship2.isAlive() || ship3.isAlive()){
+            if (ship1.isAlive() || ship2.isAlive() || ship3.isAlive()|| ship4.isAlive()){
             	switch (idToStart) {
         		case 1:
                     shield.moveShield(ship1);
@@ -601,13 +646,16 @@ public class Game extends JPanel implements ActionListener {
         		case 3:
                     shield.moveShield(ship3);
         			break ;
+        		case 4:
+        			shield.moveShield(ship4);
+        			break ;
 
         		default:
         			throw new IllegalArgumentException("Unexpected value: " + idToStart);
         		}
             }
 
-            if (ship1.isAlive() || ship2.isAlive() || ship3.isAlive() || (ship1.isAlive() && ship2.isAlive())){
+            if (ship1.isAlive() || ship2.isAlive() || ship3.isAlive() ||ship4.isAlive()||(ship1.isAlive() && ship2.isAlive())){
                 detectCollisions();
                 movePlayerWeapons();
             }
@@ -615,10 +663,16 @@ public class Game extends JPanel implements ActionListener {
             if (!ship1.isAlive()){
             	ship1.moveDeadPlayer();
             }
-
             if (!ship2.isAlive() && keyTwoCounter > 0){
             	ship2.moveDeadPlayer();
             }
+            if (!ship3.isAlive()){
+            	ship3.moveDeadPlayer();
+            }
+            if (!ship3.isAlive()){
+            	ship3.moveDeadPlayer();
+            }
+
 
             
             
@@ -708,6 +762,9 @@ public class Game extends JPanel implements ActionListener {
 			break ;
 		case 3:
 			blasterShots = ship3.getBlasterShots();
+			break ;
+		case 4:
+			blasterShots = ship4.getBlasterShots();
 			break ;
 
 		default:
@@ -824,7 +881,7 @@ public class Game extends JPanel implements ActionListener {
      * Method for drawing weapons in the game
      */
     public void drawWeapons(Graphics2D g2){
-        if (ship1.isAlive() || ship3.isAlive()){
+        if (ship1.isAlive() || ship2.isAlive()|| ship3.isAlive() || ship4.isAlive()){
             /* paint blaster beams */
             /* create arraylist to store blaster shots array */
         	shipWeapon.paint(g2);
@@ -838,21 +895,21 @@ public class Game extends JPanel implements ActionListener {
         }
 
         // PLAYER TWO
-        if (ship2.isAlive()){
-            ArrayList blasterShotsTwo = ship2.getBlasterShots();
-            for (int i = 0; i < blasterShotsTwo.size(); ++i){
-                Blaster temp = (Blaster)blasterShotsTwo.get(i);
-                temp.setImage("images/blasterTwo.png");
-                g2.drawImage(temp.getBlasterImg(), temp.getXPos(), temp.getYPos(), null);
-            }
-            // paint laser
-            ArrayList<Laser> laserShotsTwo = ship2.getLaserShots();
-            for (int i = 0; i < laserShotsTwo.size(); ++i){
-                Laser temp = laserShotsTwo.get(i);
-                temp.setImage("images/laserTwo.png");
-                g2.drawImage(temp.getLaserImg(), temp.getXPos(), temp.getYPos(), null);
-            }
-        }
+//        if (ship2.isAlive()){
+//            ArrayList blasterShotsTwo = ship2.getBlasterShots();
+//            for (int i = 0; i < blasterShotsTwo.size(); ++i){
+//                Blaster temp = (Blaster)blasterShotsTwo.get(i);
+//                temp.setImage("images/blasterTwo.png");
+//                g2.drawImage(temp.getBlasterImg(), temp.getXPos(), temp.getYPos(), null);
+//            }
+//            // paint laser
+//            ArrayList<Laser> laserShotsTwo = ship2.getLaserShots();
+//            for (int i = 0; i < laserShotsTwo.size(); ++i){
+//                Laser temp = laserShotsTwo.get(i);
+//                temp.setImage("images/laserTwo.png");
+//                g2.drawImage(temp.getLaserImg(), temp.getXPos(), temp.getYPos(), null);
+//            }
+//        }
     }
 
     /**
@@ -870,25 +927,25 @@ public class Game extends JPanel implements ActionListener {
      * Method for drawing players in the game
      */
     public void drawPlayers(Graphics2D g2){
-    	System.out.println(idToStart);
     	switch (idToStart) {
 		case 1:
 			ship3.setAlive(false);
 			ship1.setAlive(true);
 	    	ship1.paint(g2);
 			break ;
-//			case 2:
-////			ship3.setAlive(true);
-////			ship3.paint(g2);
-//			break ;
+			case 2:
+			ship2.setAlive(true);
+			ship2.paint(g2);
+			break ;
 			case 3:
 			ship1.setAlive(false);
 			ship3.setAlive(true);
 			ship3.paint(g2);
 			break ;
-//		case 4:
-//			ship4.paint(g2);
-//			break ;
+		case 4:
+			ship4.setAlive(true);
+			ship4.paint(g2);
+			break ;
 
 		default:
 		}

@@ -8,13 +8,13 @@ import javax.swing.ImageIcon;
 
 import Controller.Game;
 
-public class Ship1 extends PlayerShip {
-	public Ship1(String nullContrucstor) {
+public class Ship4 extends PlayerShip {
+	public Ship4(String nullContrucstor) {
 		
 	}
-	public Ship1(){
+	public Ship4(){
 
-        ImageIcon img = new ImageIcon("images/ship1.png");
+        ImageIcon img = new ImageIcon("images/ship4.png");
         spaceShip     = img.getImage();
         fire = true;
         this.x_pos = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
@@ -68,6 +68,8 @@ public class Ship1 extends PlayerShip {
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_Q){
 	            	setFire(true); 
+	            	
+
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_W){
 	            specialWeapon = true;
