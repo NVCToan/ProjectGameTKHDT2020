@@ -21,7 +21,6 @@ public class Ship2 extends PlayerShip {
         this.y_pos = Toolkit.getDefaultToolkit().getScreenSize().height - spaceShip.getHeight(null) - 30;
         this.moveX = 3;
         this.moveY = 3;
-        this.moveYdead = 2;
 
         this.isAlive = false;
 

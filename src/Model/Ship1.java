@@ -21,13 +21,15 @@ public class Ship1 extends PlayerShip {
         this.y_pos = Toolkit.getDefaultToolkit().getScreenSize().height - spaceShip.getHeight(null) - 30;
         this.moveX = 3;
         this.moveY = 3;
-        this.moveYdead = 2;
 
         this.isAlive = false;
 
         blasterShots = new ArrayList();
         laserShots   = new ArrayList<Laser>();
     }
+	public void setYPost(int yPost) {
+		this.y_pos = yPost;
+	}
 	@Override
 	public void setWeapon1(IWeapon weapon1) {
 		 blasterShots.add(weapon1);

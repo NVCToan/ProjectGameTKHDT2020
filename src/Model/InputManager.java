@@ -14,6 +14,7 @@ public class InputManager {
 		this.game = game;
 	}
 	public void processKeyPressed(int keyCode) {
+	
 		switch (keyCode) {
 		case KeyEvent.VK_LEFT:
 			PlayerShip.keyLeft = true;
@@ -33,9 +34,11 @@ public class InputManager {
 			break ;
 		case KeyEvent.VK_Q:
 			PlayerShip.fire =  true; 
+			game.blaserShotSound.play();
 			break ;
 		case KeyEvent.VK_W:
 			PlayerShip.specialWeapon = true;
+			game.bigBagShot.play();
 			break ;
 		case KeyEvent.VK_A:
 			if(game.superBuff < 1) {
@@ -56,10 +59,7 @@ public class InputManager {
 			}
 			break;
 		case KeyEvent.VK_SPACE:
-			if(game.isGameLost == true) {
 				game.resetGame();
-			}
-			System.out.println(game.isGameLost  );
 			break;
 		case KeyEvent.VK_ESCAPE:
 			if( game.escapeCounter < 1) {
@@ -100,6 +100,7 @@ public class InputManager {
 			break ;
 		case KeyEvent.VK_Q:
 			PlayerShip.fire =false ; 
+			game.blaserShotSound.stop();
 			break ;
 		case KeyEvent.VK_W:
 			PlayerShip.specialWeapon = false;

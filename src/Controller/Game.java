@@ -72,7 +72,7 @@ public class Game extends JPanel implements ActionListener {
     public int keyTwoCounter = 0;
 
     /* GAME BOOLEAN data */
-    public boolean isGameLost;
+    public boolean isGameLost = false;
     public boolean isGameStarted = false;
     
     // get the screen dimensions
@@ -120,6 +120,7 @@ public class Game extends JPanel implements ActionListener {
     	
         @Override
         public void keyPressed(KeyEvent e){
+        	
         	inputmanager.processKeyPressed(e.getKeyCode());
         }
         
@@ -196,7 +197,7 @@ public class Game extends JPanel implements ActionListener {
             
             if(menu.isSelectSpace) {
             	if(menu.idSpace(mouseX, mouseY) >0) {
-            		idToStart = menu.idSpace(mouseX, mouseY);
+            		 idToStart = menu.idSpace(mouseX, mouseY);
             		 isGameStarted = true;
             		 playGameSound.play();	
             	}
@@ -265,10 +266,7 @@ public class Game extends JPanel implements ActionListener {
         ImageIcon bgImg = new ImageIcon(menuBackground);
         backgroundMenu  = bgImg.getImage();
 
-      
-
-
-        isGameLost = false;
+       
 
         setFocusable(true);
 
@@ -369,58 +367,8 @@ public class Game extends JPanel implements ActionListener {
             }
         }
 
-        // PLAYER TWO COLLISIONS
-        ArrayList blasterShotsTwo = ship2.getBlasterShots();
 
-        Rectangle playerTwoBounds = ship2.getBounds();
-
-        /* check if blaster hits the enemies */
-        for (int i = 0; i < blasterShotsTwo.size(); ++i){
-            Blaster temp = (Blaster)blasterShotsTwo.get(i);
-            Rectangle blasterBounds = temp.getBounds();
-
-            for (int j = 0; j < enemies.size(); ++j){
-                if (enemiesBounds.get(j).intersects(blasterBounds) && enemies.get(j).isAlive()){
-                    enemies.get(j).setAlive(false);
-                    temp.setVisible(false);
-                    stats.setPlayerTwoScore(stats.getPlayerTwoScore()+10);
-                }
-            }
-        }
-        /* check if laser hits the enemies */
-        ArrayList<Laser> laserShotsTwo = ship2.getLaserShots();
-        for (int i = 0; i < laserShotsTwo.size(); ++i){
-            Laser temp = laserShotsTwo.get(i);
-            Rectangle laserBounds = temp.getBounds();
-
-            for (int j = 0; j < enemies.size(); ++j){
-                if (enemiesBounds.get(j).intersects(laserBounds) && enemies.get(j).isAlive()){
-                    enemies.get(j).setAlive(false);
-                    temp.setVisible(false);
-                    stats.setPlayerTwoScore(stats.getPlayerTwoScore()+10);
-                }
-            }
-        }
-
-        /* check if player two collides with enemies */
-        for (int i = 0; i < enemies.size(); ++i){
-            if (playerTwoBounds.intersects(enemies.get(i).getBounds()) &&
-                    enemies.get(i).isAlive() && ship2.isAlive()){
-
-            	ship2.setAlive(false);
-            }
-        }
-        // check for collisions between player and enemies' fire
-        for (int i = 0; i < fireShots.size(); ++i){
-            if (playerTwoBounds.intersects(fireShots.get(i).getBounds()) &&
-                    fireShots.get(i).isVisible() && ship2.isAlive()){
-
-                fireShots.get(i).setVisible(false);
-                ship2.setAlive(false);
-            }
-        }
-
-        if (!ship1.isAlive() || !ship2.isAlive() || !ship3.isAlive() || !ship4.isAlive()){
+        if (!ship1.isAlive() ){
             isGameLost = true;
         }
 
@@ -433,7 +381,7 @@ public class Game extends JPanel implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e){
-
+    	
         if (isGameStarted){
             if (ship1.isAlive()){
                 if (ship1.isKeyLeft() && ship1.getX() > 20){
@@ -592,28 +540,51 @@ public class Game extends JPanel implements ActionListener {
         			throw new IllegalArgumentException("Unexpected value: " + idToStart);
         		}
             }
+         
 
-            if (ship1.isAlive() || ship2.isAlive() || ship3.isAlive() ||ship4.isAlive()||(ship1.isAlive() && ship2.isAlive())){
-                detectCollisions();
-                movePlayerWeapons();
-            }
+            switch (idToStart) {
+			case 1:
+				   if (ship1.isAlive() ){
+		                detectCollisions();
+		                movePlayerWeapons();
+		            }
+				   if (!ship1.isAlive()){
+					   PlayerShip.moveDeadPlayer();
+					   ship1.setFire(false);
+				   }
+				break ;
+			case 2:
+				  if (ship2.isAlive() ){
+		                detectCollisions();
+		                movePlayerWeapons();
+		            }
+				if (!ship2.isAlive()){
+					PlayerShip.moveDeadPlayer();
+					ship2.setFire(false);				}
+				break ;
+			case 3:
+				if (ship3.isAlive() ){
+					detectCollisions();
+					movePlayerWeapons();
+				}
+				if (!ship3.isAlive()){
+					ship3.moveDeadPlayer();
+					ship3.setFire(false);				}
+				break ;
+			case 4:
+				if (ship4.isAlive() ){
+					detectCollisions();
+					movePlayerWeapons();
+				}
+				if (!ship4.isAlive()){
+					ship4.moveDeadPlayer();
+					ship4.setFire(false);				}
+				break ;
 
-            if (!ship1.isAlive()){
-            	ship1.moveDeadPlayer();
-            }
-            if (!ship2.isAlive() && keyTwoCounter > 0){
-            	ship2.moveDeadPlayer();
-            }
-            if (!ship3.isAlive()){
-            	ship3.moveDeadPlayer();
-            }
-            if (!ship4.isAlive()){
-            	ship4.moveDeadPlayer();
-            }
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + idToStart);
+			}
 
-
-            
-            
             moveEnemies();
             enemiesFire();
 
@@ -646,7 +617,7 @@ public class Game extends JPanel implements ActionListener {
                 int x_position = 50 + rand.nextInt(screenWidth - 100);
                 int y_position = -rand.nextInt(ENEMIES_SPAWN_Y);
                 enemy = new SpaceCraft(x_position, y_position);
-                enemy.setImage("images/enemy-old.png");
+                enemy.setImage("images/enemy2.png");
                 enemies.set(i, enemy);
             }
         }
@@ -867,20 +838,22 @@ public class Game extends JPanel implements ActionListener {
     public void drawPlayers(Graphics2D g2){
     	switch (idToStart) {
 		case 1:
-			ship3.setAlive(false);
+			isGameLost=false;
 			ship1.setAlive(true);
 	    	ship1.paint(g2);
 			break ;
-			case 2:
+		case 2:
+			isGameLost=false;
 			ship2.setAlive(true);
 			ship2.paint(g2);
 			break ;
-			case 3:
-			ship1.setAlive(false);
+		case 3:
+			isGameLost=false;
 			ship3.setAlive(true);
 			ship3.paint(g2);
 			break ;
 		case 4:
+			isGameLost=false;
 			ship4.setAlive(true);
 			ship4.paint(g2);
 			break ;
@@ -981,7 +954,8 @@ public class Game extends JPanel implements ActionListener {
     }
 
 	public void resetGame() {
-		ship1    = new Ship1();
-        isGameLost = false;
-        isGameStarted = true;	}
+		PlayerShip.moveAlivePlayer();
+		isGameLost = false;
+		isGameStarted = true;	
+        }
 }

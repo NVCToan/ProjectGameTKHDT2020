@@ -6,14 +6,15 @@ import java.util.ArrayList;
 
 
 public abstract class PlayerShip {
-	protected int x_pos;
-    protected int y_pos;
+	public static int x_pos;
+    public static int y_pos;
     protected Image spaceShip;
 
     /* speed of moving right, left and when dead */
     protected int moveX;
     protected int moveY;
-    protected int moveYdead;
+    public static int moveYdead =2000;
+    public static int moveYAlive =Toolkit.getDefaultToolkit().getScreenSize().height - 200;
 
     protected int blasterDelay = 20;
     protected int laserDelay = 100;
@@ -135,17 +136,22 @@ public abstract class PlayerShip {
     }
 
     public boolean isAlive(){
-        return isAlive;
+        return isAlive;	
     }
 
     public void setAlive(boolean is){
         this.isAlive = is;
     }
 
-    public void moveDeadPlayer(){
-        this.y_pos += moveYdead;
+    public static  void moveDeadPlayer(){
+    	y_pos += moveYdead;
     }
-
+    public static  void moveAlivePlayer(){
+    	y_pos = moveYAlive;
+    }
+    public void setYPos(int yPos) {
+    	this.y_pos = yPos;
+    }
 	public abstract void setWeapon2Laser();
 
 	public abstract void paint(Graphics2D g2);
