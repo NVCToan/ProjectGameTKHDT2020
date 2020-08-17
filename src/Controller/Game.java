@@ -46,6 +46,8 @@ import java.util.Random;
 
 public class Game extends JPanel implements ActionListener {
 	public static int idToStart = -1;
+	public  int isSelectedID ;
+	
 	public int superBuff=0;
     public PlayerShip ship1;
     public PlayerShip ship2;
@@ -198,12 +200,13 @@ public class Game extends JPanel implements ActionListener {
             if(menu.isSelectSpace) {
             	if(menu.idSpace(mouseX, mouseY) >0) {
             		 idToStart = menu.idSpace(mouseX, mouseY);
+            		 isSelectedID = menu.idSpace(mouseX, mouseY);
             		 isGameStarted = true;
             		 playGameSound.play();	
             	}
             	
             }
-            
+           
 
             
             if (mouseX > menu.settingsButton().x && mouseX < menu.settingsButton().x + menu.settingsButton().width &&
@@ -301,8 +304,6 @@ public class Game extends JPanel implements ActionListener {
 			blasterShots = ship4.getBlasterShots();
 			playerBounds   = ship4.getBounds();			break ;
 			
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + idToStart);
 		}
         
 
@@ -346,8 +347,10 @@ public class Game extends JPanel implements ActionListener {
         for (int i = 0; i < enemies.size(); ++i){
             if (playerBounds.intersects(enemies.get(i).getBounds()) &&
                     !shield.isShieldActive() && enemies.get(i).isAlive()){
+            		idToStart = 0;
+            		ship1.setAlive(false);
+//                    isGameLost = true;
 
-                ship1.setAlive(false);
             }
         }
 
@@ -363,14 +366,13 @@ public class Game extends JPanel implements ActionListener {
                     !shield.isShieldActive() && fireShots.get(i).isVisible()){
 
                 fireShots.get(i).setVisible(false);
+                idToStart = 0;
                 ship1.setAlive(false);
+//                isGameLost = true;
             }
         }
 
 
-        if (!ship1.isAlive() ){
-            isGameLost = true;
-        }
 
     }
 
@@ -381,9 +383,71 @@ public class Game extends JPanel implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e){
+    	// set Ship True
     	
         if (isGameStarted){
-            if (ship1.isAlive()){
+        	 switch (idToStart) {
+     		case 1:
+     			ship1.setAlive(true);
+     			
+     			break ;
+     		case 2:
+     			ship1.setAlive(true);
+
+     			break ;
+     		case 3:
+     			ship1.setAlive(true);
+
+     			break ;
+     		
+     		case 4:
+     			ship1.setAlive(true);
+     			break ;
+     			
+     		}
+             
+    			   if (ship1.isAlive()==true ){
+    	                detectCollisions();
+    	                movePlayerWeapons();
+    	            }
+    			   if (ship1.isAlive()==false){
+    				   ship1.setFire(false);
+    				   isGameLost=true;
+    				   ship1.setSpecialWeapon(false); 
+    			   }
+    			  if (ship2.isAlive() ==true){
+    	                detectCollisions();
+    	                movePlayerWeapons();
+    	            }
+    			if (ship2.isAlive()==false){
+
+    					ship2.setFire(false);		
+    				 isGameLost=true;
+    				 ship2.setSpecialWeapon(false); 
+    				 }
+    			if (ship3.isAlive()==true ){
+        			isGameLost = false;
+    				detectCollisions();
+    				movePlayerWeapons();
+    			}
+    			if (ship3.isAlive()==false){
+    				ship3.moveDeadPlayer();
+    				ship3.setFire(false);	
+    				isGameLost=true;
+    				ship3.setSpecialWeapon(false); 	
+    			}
+    			if (ship4.isAlive()==true ){
+    				detectCollisions();
+    				movePlayerWeapons();
+    			}
+    			if (ship4.isAlive()==false){
+    				ship4.moveDeadPlayer();
+    				ship4.setFire(false);	
+    				isGameLost=true;
+    				ship4.setSpecialWeapon(false); 
+    				}
+        	//End set Ship True
+            if (ship1.isAlive() == true){
                 if (ship1.isKeyLeft() && ship1.getX() > 20){
                 	ship1.moveLeft();
                 }
@@ -421,7 +485,7 @@ public class Game extends JPanel implements ActionListener {
                 }
             }
             //Ship2
-            if (ship2.isAlive()){
+            if (ship2.isAlive()==true){
                 if (ship2.isKeyLeft() && ship2.getX() > 20){
                 	ship2.moveLeft();
                 }
@@ -454,7 +518,7 @@ public class Game extends JPanel implements ActionListener {
             // End ship2
             //ship3
             
-            if (ship3.isAlive()){
+            if (ship3.isAlive()==true){
                 if (ship3.isKeyLeft() && ship3.getX() > 20){
                 	ship3.moveLeft();
                 }
@@ -486,7 +550,7 @@ public class Game extends JPanel implements ActionListener {
             }
             // End ship3
             // Ship4
-            if (ship4.isAlive()){
+            if (ship4.isAlive()==true){
             	if (ship4.isKeyLeft() && ship4.getX() > 20){
             		ship4.moveLeft();
             	}
@@ -536,54 +600,11 @@ public class Game extends JPanel implements ActionListener {
         			shield.moveShield(ship4);
         			break ;
 
-        		default:
-        			throw new IllegalArgumentException("Unexpected value: " + idToStart);
         		}
             }
          
 
-            switch (idToStart) {
-			case 1:
-				   if (ship1.isAlive() ){
-		                detectCollisions();
-		                movePlayerWeapons();
-		            }
-				   if (!ship1.isAlive()){
-					   PlayerShip.moveDeadPlayer();
-					   ship1.setFire(false);
-				   }
-				break ;
-			case 2:
-				  if (ship2.isAlive() ){
-		                detectCollisions();
-		                movePlayerWeapons();
-		            }
-				if (!ship2.isAlive()){
-					PlayerShip.moveDeadPlayer();
-					ship2.setFire(false);				}
-				break ;
-			case 3:
-				if (ship3.isAlive() ){
-					detectCollisions();
-					movePlayerWeapons();
-				}
-				if (!ship3.isAlive()){
-					ship3.moveDeadPlayer();
-					ship3.setFire(false);				}
-				break ;
-			case 4:
-				if (ship4.isAlive() ){
-					detectCollisions();
-					movePlayerWeapons();
-				}
-				if (!ship4.isAlive()){
-					ship4.moveDeadPlayer();
-					ship4.setFire(false);				}
-				break ;
-
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + idToStart);
-			}
+            
 
             moveEnemies();
             enemiesFire();
@@ -613,12 +634,26 @@ public class Game extends JPanel implements ActionListener {
                 }
             }
 
-            if (!enemy.isAlive() || enemy.getY() > screenHeight){
+            if (stats.getPlayerOneScore() < 30 && (enemy.isAlive()==false || enemy.getY() > screenHeight)){
                 int x_position = 50 + rand.nextInt(screenWidth - 100);
                 int y_position = -rand.nextInt(ENEMIES_SPAWN_Y);
                 enemy = new SpaceCraft(x_position, y_position);
                 enemy.setImage("images/enemy2.png");
                 enemies.set(i, enemy);
+            }
+            if(stats.getPlayerOneScore()>30 &&stats.getPlayerOneScore()<=40&& (enemy.isAlive() ==false|| enemy.getY() > screenHeight)) {
+            	int x_position = 50 + rand.nextInt(screenWidth - 100);
+                int y_position = -rand.nextInt(ENEMIES_SPAWN_Y);
+                enemy = new SpaceCraft(x_position, y_position);
+                enemy.setImage("images/enemy-old.png");
+                enemies.set(i, enemy);
+            }
+            if(stats.getPlayerOneScore()>40 && (enemy.isAlive() ==false|| enemy.getY() > screenHeight)) {
+            	int x_position = 50 + rand.nextInt(screenWidth - 100);
+            	int y_position = -rand.nextInt(ENEMIES_SPAWN_Y);
+            	enemy = new SpaceCraft(x_position, y_position);
+            	enemy.setImage("images/boss.png");
+            	enemies.set(i, enemy);
             }
         }
     }
@@ -676,8 +711,6 @@ public class Game extends JPanel implements ActionListener {
 			blasterShots = ship4.getBlasterShots();
 			break ;
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + idToStart);
 		}
        
         /* if the blaster is visible - move */
@@ -703,27 +736,27 @@ public class Game extends JPanel implements ActionListener {
 
         // PLAYER TWO
         /* blaster shots */
-        ArrayList blasterShotsTwo = ship2.getBlasterShots();
-        /* if the blaster is visible - move */
-        for (int i = 0; i < blasterShotsTwo.size(); ++i){
-            Blaster temp = (Blaster)blasterShotsTwo.get(i);
-            if (temp.isVisible() == true){
-                temp.moveShot();
-            } else {
-                blasterShotsTwo.remove(i);
-            }
-        }
-
-        // laser
-        ArrayList<Laser> laserShotsTwo = ship2.getLaserShots();
-        for (int i = 0; i < laserShotsTwo.size(); ++i){
-            Laser temp = laserShotsTwo.get(i);
-            if (temp.isVisible() == true){
-                temp.moveShot();
-            } else {
-                laserShotsTwo.remove(i);
-            }
-        }
+//        ArrayList blasterShotsTwo = ship2.getBlasterShots();
+//        /* if the blaster is visible - move */
+//        for (int i = 0; i < blasterShotsTwo.size(); ++i){
+//            Blaster temp = (Blaster)blasterShotsTwo.get(i);
+//            if (temp.isVisible() == true){
+//                temp.moveShot();
+//            } else {
+//                blasterShotsTwo.remove(i);
+//            }
+//        }
+//
+//        // laser
+//        ArrayList<Laser> laserShotsTwo = ship2.getLaserShots();
+//        for (int i = 0; i < laserShotsTwo.size(); ++i){
+//            Laser temp = laserShotsTwo.get(i);
+//            if (temp.isVisible() == true){
+//                temp.moveShot();
+//            } else {
+//                laserShotsTwo.remove(i);
+//            }
+//        }
     }
 
     /**
@@ -762,7 +795,7 @@ public class Game extends JPanel implements ActionListener {
 
             drawStats(graphics2D);
 
-            if (isGameLost){
+            if (isGameLost==true){
             	overGame.paint(graphics2D);
             }
         }
@@ -790,7 +823,7 @@ public class Game extends JPanel implements ActionListener {
      * Method for drawing weapons in the game
      */
     public void drawWeapons(Graphics2D g2){
-        if (ship1.isAlive() || ship2.isAlive()|| ship3.isAlive() || ship4.isAlive()){
+        if (ship1.isAlive()==true || ship2.isAlive()==true || ship3.isAlive()==true || ship4.isAlive()==true){
             /* paint blaster beams */
             /* create arraylist to store blaster shots array */
         	shipWeapon.paint(g2);
@@ -836,29 +869,22 @@ public class Game extends JPanel implements ActionListener {
      * Method for drawing players in the game
      */
     public void drawPlayers(Graphics2D g2){
-    	switch (idToStart) {
+    	switch (isSelectedID) {
 		case 1:
-			isGameLost=false;
-			ship1.setAlive(true);
 	    	ship1.paint(g2);
 			break ;
 		case 2:
-			isGameLost=false;
-			ship2.setAlive(true);
 			ship2.paint(g2);
 			break ;
 		case 3:
-			isGameLost=false;
-			ship3.setAlive(true);
+			
 			ship3.paint(g2);
 			break ;
 		case 4:
-			isGameLost=false;
-			ship4.setAlive(true);
 			ship4.paint(g2);
+			
 			break ;
 
-		default:
 		}
     
     }
@@ -954,6 +980,11 @@ public class Game extends JPanel implements ActionListener {
     }
 
 	public void resetGame() {
+		idToStart  = isSelectedID;
+			ship1.setAlive(true);
+			ship2.setAlive(true);
+			ship3.setAlive(true);
+			ship4.setAlive(true);
 		PlayerShip.moveAlivePlayer();
 		isGameLost = false;
 		isGameStarted = true;	

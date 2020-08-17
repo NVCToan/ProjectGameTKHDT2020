@@ -14,7 +14,7 @@ public abstract class PlayerShip {
     protected int moveX;
     protected int moveY;
     public static int moveYdead =2000;
-    public static int moveYAlive =Toolkit.getDefaultToolkit().getScreenSize().height - 200;
+    public static int moveYAlive = Toolkit.getDefaultToolkit().getScreenSize().height - 200;
 
     protected int blasterDelay = 20;
     protected int laserDelay = 100;
@@ -29,10 +29,12 @@ public abstract class PlayerShip {
     public static boolean keyDown;
     public static boolean fire;
     public static boolean specialWeapon;
-    protected boolean isAlive;
+    public static boolean isAlive;
 
     
-
+    public void setSpecialWeapon(boolean b) {
+    	specialWeapon = b;
+    }
     public void moveRight(){
         x_pos += moveX;
     }

@@ -17,47 +17,57 @@ public class InputManager {
 	
 		switch (keyCode) {
 		case KeyEvent.VK_LEFT:
+			if(PlayerShip.isAlive == true)
 			PlayerShip.keyLeft = true;
 
 			break ;
 		case KeyEvent.VK_RIGHT:
+			if(PlayerShip.isAlive == true)
 			PlayerShip.keyRight = true;
 
 			break ;
 		case KeyEvent.VK_UP:
+			if(PlayerShip.isAlive == true)
 			PlayerShip.keyUp = true;
 
 			break ;
 		case KeyEvent.VK_DOWN:
+			if(PlayerShip.isAlive == true)
 			PlayerShip.keyDown = true;
 
 			break ;
 		case KeyEvent.VK_Q:
+			if(PlayerShip.isAlive == true)
 			PlayerShip.fire =  true; 
 			game.blaserShotSound.play();
 			break ;
 		case KeyEvent.VK_W:
+			if(PlayerShip.isAlive == true)
 			PlayerShip.specialWeapon = true;
 			game.bigBagShot.play();
 			break ;
 		case KeyEvent.VK_A:
+			if(PlayerShip.isAlive == true)
 			if(game.superBuff < 1) {
         		game.superBuff++;
         	}else game.superBuff=0;
               
 			break;
 		case KeyEvent.VK_R:
+			if(PlayerShip.isAlive == true)
 			game.shield.shieldActive=true;
 		break;
 		case KeyEvent.VK_T:
+			if(PlayerShip.isAlive == true)
 			game.shield.shieldActive=false;
 			break;
-		case KeyEvent.VK_2:
-			if( game.keyTwoCounter == 0 && !game.isGameLost) {
-				 game.ship2.setAlive(true);
-	                game.keyTwoCounter++;
-			}
-			break;
+//		case KeyEvent.VK_2:
+//			if(PlayerShip.isAlive == true)
+//			if( game.keyTwoCounter == 0 && !game.isGameLost) {
+//				 game.ship2.setAlive(true);
+//	                game.keyTwoCounter++;
+//			}
+//			break;
 		case KeyEvent.VK_SPACE:
 				game.resetGame();
 			break;

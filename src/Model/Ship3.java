@@ -22,7 +22,7 @@ public class Ship3 extends PlayerShip {
         this.moveX = 3;
         this.moveY = 3;
 
-        this.isAlive = false;
+        this.isAlive = true;
 
         blasterShots = new ArrayList();
         laserShots   = new ArrayList<Laser>();
@@ -53,12 +53,7 @@ public class Ship3 extends PlayerShip {
 	}
 
 public void paint(Graphics2D g2) {
-	   if (isAlive()){
 		   g2.drawImage(getImage(), getX(), getY(), null);
-     } else {
-     	setImage("images/explosion.gif");
-     	g2.drawImage(getImage(), getX(), getY(), null);
-     }
 }
 
 }

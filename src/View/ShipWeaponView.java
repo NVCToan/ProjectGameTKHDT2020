@@ -43,8 +43,6 @@ public class ShipWeaponView {
 			blasterShots = ship4.getBlasterShots();
 			break ;
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + game.idToStart);
 		}
 			
             for (int i = 0; i < blasterShots.size(); ++i){
@@ -66,8 +64,6 @@ public class ShipWeaponView {
     			laserShots = ship4.getLaserShots();
     			break ;
 
-    		default:
-    			throw new IllegalArgumentException("Unexpected value: " + game.idToStart);
     		}
            
             for (int i = 0; i < laserShots.size(); ++i){

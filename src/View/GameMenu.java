@@ -144,9 +144,9 @@ public class GameMenu {
             g.setColor(new Color(1, 178, 241));
 
             g.drawString("START", buttonX + 80, startButtonY + padding);
-            g.drawString("SETTINGS", buttonX + 60, settingsButtonY + padding);
+            g.drawString("HELP", buttonX + 90, settingsButtonY + padding);
             g.drawString("EXIT", buttonX + 95, exitButtonY + padding);
-
+            
         } else if(isSettingsOpened) {  // draw SETTING
         	if (!isBackButtonClicked){
 
@@ -295,7 +295,7 @@ public class GameMenu {
                 g.setColor(new Color(1, 178, 241));
 
                 g.drawString("START", buttonX + 80, startButtonY + padding);
-                g.drawString("SETTINGS", buttonX + 60, settingsButtonY + padding);
+                g.drawString("HELP", buttonX + 60, settingsButtonY + padding);
                 g.drawString("EXIT", buttonX + 95, exitButtonY + padding);
 
                 isBackButtonClicked = false;
