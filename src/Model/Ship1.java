@@ -52,50 +52,6 @@ public class Ship1 extends PlayerShip {
 			laserShots.add(laser);
 		}	
 	}
-	@Override
-	public void keyPressed(KeyEvent e) {
-		 if (e.getKeyCode() == KeyEvent.VK_LEFT){
-	            keyLeft = true;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-	            keyRight = true;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_UP){
-	            keyUp = true;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_DOWN){
-	            keyDown = true;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_Q){
-	            	setFire(true); 
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_W){
-	            specialWeapon = true;
-	         
-	        }		
-	}
-	@Override
-	public void keyReleased(KeyEvent e) {
-		 if (e.getKeyCode() == KeyEvent.VK_LEFT){
-	            keyLeft = false;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-	            keyRight = false;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_UP){
-	            keyUp = false;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_DOWN){
-	            keyDown = false;
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_Q){
-	            setFire(false);
-
-	        }
-	        if (e.getKeyCode() == KeyEvent.VK_W){
-	            specialWeapon = false;
-	        }			
-	}
 
 public void paint(Graphics2D g2) {
 	   if (isAlive()){

@@ -1,41 +1,79 @@
 package Model;
 import javax.swing.*;
+
+import Controller.Game;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 
+
 public class InputManager {
-	private PlayerShip playerShip;
-	public InputManager(PlayerShip playerShip ) {
-		this.playerShip = playerShip;
+	Game game;
+	public InputManager(Game game) {
+		this.game = game;
 	}
 	public void processKeyPressed(int keyCode) {
 		switch (keyCode) {
-		case KeyEvent.VK_UP:
-			break ;
-		case KeyEvent.VK_DOWN:
-			break ;
 		case KeyEvent.VK_LEFT:
+			PlayerShip.keyLeft = true;
+
 			break ;
 		case KeyEvent.VK_RIGHT:
+			PlayerShip.keyRight = true;
+
+			break ;
+		case KeyEvent.VK_UP:
+			PlayerShip.keyUp = true;
+
+			break ;
+		case KeyEvent.VK_DOWN:
+			PlayerShip.keyDown = true;
+
+			break ;
+		case KeyEvent.VK_Q:
+			PlayerShip.fire =  true; 
+			break ;
+		case KeyEvent.VK_W:
+			PlayerShip.specialWeapon = true;
 			break ;
 		case KeyEvent.VK_A:
-		case KeyEvent.VK_ENTER:
-			if(playerShip.CURRENT_SCREEN  == playerShip.GAMEOVER_SRCEEN) {
-				playerShip.CURRENT_SCREEN = playerShip.BEGIN_SCREEN;
+			if(game.superBuff < 1) {
+        		game.superBuff++;
+        	}else game.superBuff=0;
+              
+			break;
+		case KeyEvent.VK_R:
+			game.shield.shieldActive=true;
+		break;
+		case KeyEvent.VK_T:
+			game.shield.shieldActive=false;
+			break;
+		case KeyEvent.VK_2:
+			if( game.keyTwoCounter == 0 && !game.isGameLost) {
+				 game.ship2.setAlive(true);
+	                game.keyTwoCounter++;
 			}
-			break ;
+			break;
 		case KeyEvent.VK_SPACE:
-			switch (playerShip.CURRENT_SCREEN) {
-			case playerShip.BEGIN_SCREEN:
-				playerShip.CURRENT_SCREEN = playerShip.GAMEPLAY_SCREEN;
-				break ;
-			case FlappyBirds.GAMEPLAY_SCREEN:
-				if(flappyBird.bird.getLive())flappyBird.bird.fly();
-				break ;
-			default: ;
-				break ;
+			if(game.isGameLost == true) {
+				game.resetGame();
 			}
+			System.out.println(game.isGameLost  );
+			break;
+		case KeyEvent.VK_ESCAPE:
+			if( game.escapeCounter < 1) {
+				game.isGameStarted = false;
+				game.escapeCounter+=1;
+			}else
+			if(game.escapeCounter > 0) {
+				game.isGameStarted = true;
+                game.escapeCounter-=1;
+			}
+			break;
+		case KeyEvent.VK_ENTER:
+			
+			break ;
 			
 			
 
@@ -44,22 +82,51 @@ public class InputManager {
 	}
 	public void processKeyReleased(int keyCode) {
 		switch (keyCode) {
+		case KeyEvent.VK_LEFT:
+			PlayerShip.keyLeft = false;
+
+			break ;
+		case KeyEvent.VK_RIGHT:
+			PlayerShip.keyRight = false;
+
+			break ;
 		case KeyEvent.VK_UP:
+			PlayerShip.keyUp = false;
 
 			break ;
 		case KeyEvent.VK_DOWN:
+			PlayerShip.keyDown = false;
+
 			break ;
-		case KeyEvent.VK_RIGHT:
+		case KeyEvent.VK_Q:
+			PlayerShip.fire =false ; 
+			break ;
+		case KeyEvent.VK_W:
+			PlayerShip.specialWeapon = false;
 			break ;
 		case KeyEvent.VK_A:
 			
-			break ;
+			break;
+		case KeyEvent.VK_ESCAPE:
+			if( game.escapeCounter < 1) {
+				game.isGameStarted = true;
+			}
+			if(game.escapeCounter > 0) {
+				game.isGameStarted = false;
+			}
+			break;
+		case KeyEvent.VK_R:
+			game.shield.shieldActive=true;
+		break;
+		case KeyEvent.VK_T:
+			game.shield.shieldActive=false;
+			break;
 		case KeyEvent.VK_ENTER:
 			
 			break ;
 		case KeyEvent.VK_SPACE:
 			
-			break ;
+		break;
 			
 			
 		}

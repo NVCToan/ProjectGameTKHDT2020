@@ -15,6 +15,7 @@ import javax.swing.*;
 import Model.Blaster;
 import Model.CacheDataLoader;
 import Model.DataConfig;
+import Model.InputManager;
 import Model.Laser;
 import Model.PlayerShip;
 import Model.Shield;
@@ -45,15 +46,15 @@ import java.util.Random;
 
 public class Game extends JPanel implements ActionListener {
 	public static int idToStart = -1;
-	private int superBuff=0;
-    private Ship1 ship1;
-    private Ship2 ship2;
-    private Ship3 ship3;
-    private Ship4 ship4;
-    private Shield shield;
+	public int superBuff=0;
+    public PlayerShip ship1;
+    public PlayerShip ship2;
+    public PlayerShip ship3;
+    public PlayerShip ship4;
+    public Shield shield;
     private Image backgroundMenu;
     private Timer time;
-
+    InputManager inputmanager;
     //Background
     Background background;
    // OverGameView
@@ -67,12 +68,12 @@ public class Game extends JPanel implements ActionListener {
     // EnemiWeapon
 //    EnemiWeaponView enemiWeapon;
     /* GAME VARIABLES */
-    private int escapeCounter = 0;
-    private int keyTwoCounter = 0;
+    public int escapeCounter = 0;
+    public int keyTwoCounter = 0;
 
     /* GAME BOOLEAN data */
-    private boolean isGameLost;
-    private boolean isGameStarted = false;
+    public boolean isGameLost;
+    public boolean isGameStarted = false;
     
     // get the screen dimensions
     public static int screenWidth  = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -119,65 +120,17 @@ public class Game extends JPanel implements ActionListener {
     	
         @Override
         public void keyPressed(KeyEvent e){
-            ship1.keyPressed(e);
-            ship2.keyPressed(e);
-            ship3.keyPressed(e);
-            ship4.keyPressed(e);
-            shield.keyPressed(e);
-         
-
-//            if (e.getKeyCode() == KeyEvent.VK_F1){
-//                saveConfig();
-//            }
-//            if (e.getKeyCode() == KeyEvent.VK_A){
-//                loadConfig();
-//                playerTwo.setImage("images/playerTwo.png");
-//            }
-
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE && escapeCounter < 1){
-                isGameStarted = false;
-                ++escapeCounter;
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_ESCAPE && escapeCounter > 0){
-                isGameStarted = true;
-                --escapeCounter;
-            }
-
-            if (e.getKeyCode() == KeyEvent.VK_2 && keyTwoCounter == 0 && !isGameLost){
-                ship2.setAlive(true);
-                ++keyTwoCounter;
-            }
-            if(e.getKeyCode() == KeyEvent.VK_A) {
-            		
-            	if(superBuff < 1) {
-            		superBuff++;
-            	}else superBuff=0;
-                   
-            }
-          
-            if(isGameLost == true && e.getKeyCode() == KeyEvent.VK_SPACE) {
-            	resetGame();
-            }
+        	inputmanager.processKeyPressed(e.getKeyCode());
         }
         public void resetGame() {
         	ship1    = new Ship1();
             isGameLost = false;
             isGameStarted = true;
    	}
+        
         @Override
         public void keyReleased(KeyEvent e){
-            ship1.keyReleased(e);
-            ship2.keyReleased(e);
-            ship3.keyReleased(e);
-            ship4.keyReleased(e);
-            shield.keyPressed(e);
-
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE && escapeCounter > 0){
-                isGameStarted = false;
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_ESCAPE && escapeCounter < 1){
-                isGameStarted = true;
-            }
+        	inputmanager.processKeyReleased(e.getKeyCode());
         }
     }
 
@@ -292,6 +245,7 @@ public class Game extends JPanel implements ActionListener {
         ship3 = new Ship3();
         ship4 = new Ship4();
         shield    = new Shield(ship1.getX(), ship1.getY());
+        inputmanager = new InputManager(this);
        background = new Background();
        stats = new StatsView();
        shipWeapon = new ShipWeaponView();
@@ -1041,4 +995,8 @@ public class Game extends JPanel implements ActionListener {
     public int getKeyTwoCounter() {
     	return keyTwoCounter;
     }
+
+	public void resetGame() {
+		System.out.println("resetgame");
+	}
 }

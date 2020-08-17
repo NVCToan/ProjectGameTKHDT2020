@@ -74,7 +74,6 @@ public class SpaceCraft implements IEnemy {
     public SpaceCraftWeapon shoot(){
         SpaceCraftWeapon fireShot = new SpaceCraftWeapon(x_pos, y_pos);
         fireShots.add(fireShot);
-
         return fireShot;
     }
 

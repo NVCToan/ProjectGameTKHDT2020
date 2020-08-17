@@ -22,12 +22,12 @@ public abstract class PlayerShip {
     static ArrayList blasterShots;
     static ArrayList<Laser> laserShots;
     
-    protected boolean keyLeft;
-    protected boolean keyRight;
-    protected boolean keyUp;
-    protected boolean keyDown;
-    protected boolean fire;
-    protected boolean specialWeapon;
+    public static boolean keyLeft;
+    public static boolean keyRight;
+    public static boolean keyUp;
+    public static boolean keyDown;
+    public static boolean fire;
+    public static boolean specialWeapon;
     protected boolean isAlive;
 
     
@@ -146,20 +146,10 @@ public abstract class PlayerShip {
         this.y_pos += moveYdead;
     }
 
-    /* register when key is down */
-    public abstract void keyPressed(KeyEvent e);
-
-       
-      
-     
-
-
-    /* register when key is released */
-    public abstract void keyReleased(KeyEvent e);
-
 	public abstract void setWeapon2Laser();
 
-//	public abstract void paint(Graphics2D g2);
+	public abstract void paint(Graphics2D g2);
+
 
        
 }

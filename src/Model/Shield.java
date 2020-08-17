@@ -52,27 +52,6 @@ public class Shield {
         shieldActive = is;
     }
 
-    public void keyPressed(KeyEvent e){
-        switch (e.getKeyCode()){
-            case KeyEvent.VK_R:
-                shieldActive = true;
-                break;
-            case KeyEvent.VK_T:
-                shieldActive = false;
-                break;
-        }
-    }
-
-    public void keyReleased(KeyEvent e){
-        switch (e.getKeyCode()){
-            case KeyEvent.VK_R:
-                shieldActive = true;
-                break;
-            case KeyEvent.VK_T:
-                shieldActive = false;
-                break;
-        }
-    }
     public void paint(Graphics2D g2) {
         if (isShieldActive()){
         	g2.drawImage(getImage(), shieldX(),shieldY(), null);
