@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game extends JPanel implements ActionListener {
-	private int idToStart = -1;
+	public static int idToStart = -1;
 	private int superBuff=0;
     private Ship1 ship1;
     private Ship2 ship2;
@@ -60,6 +60,8 @@ public class Game extends JPanel implements ActionListener {
     StatsView stats ;
     // Ship weapon
     ShipWeaponView shipWeapon;
+    ArrayList blasterShots = null;
+    Rectangle playerBounds = null;
     // EnemiWeapon
 //    EnemiWeaponView enemiWeapon;
     /* GAME VARIABLES */
@@ -108,15 +110,18 @@ public class Game extends JPanel implements ActionListener {
     /**
      * Class for registering key presses
      */
+    public int getIdToStart() {
+    	return idToStart;
+    }
     private class MyActionListener extends KeyAdapter {
     	
         @Override
         public void keyPressed(KeyEvent e){
             ship1.keyPressed(e);
             ship2.keyPressed(e);
-            if (ship1.isAlive()){
-                shield.keyPressed(e);
-            }
+            ship3.keyPressed(e);
+            shield.keyPressed(e);
+         
 
 //            if (e.getKeyCode() == KeyEvent.VK_F1){
 //                saveConfig();
@@ -160,9 +165,8 @@ public class Game extends JPanel implements ActionListener {
         public void keyReleased(KeyEvent e){
             ship1.keyReleased(e);
             ship2.keyReleased(e);
-            if (ship1.isAlive()){
-                shield.keyPressed(e);
-            }
+            ship3.keyReleased(e);
+            shield.keyPressed(e);
 
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE && escapeCounter > 0){
                 isGameStarted = false;
@@ -277,15 +281,16 @@ public class Game extends JPanel implements ActionListener {
     public Game(int a) {
     	
     }
+
     public Game(){
         ship1    = new Ship1();
         ship2 = new Ship2();
         ship3 = new Ship3();
+        shield    = new Shield(ship1.getX(), ship1.getY());
        background = new Background();
        stats = new StatsView();
        shipWeapon = new ShipWeaponView();
        overGame = new OverGameView();
-        shield    = new Shield(ship1.getX(), ship1.getY());
         /* spawn enemies */
         for (int i = 0; i < 10 ; ++i){
             int x_position = 50 + randGen.nextInt(screenWidth - 100);
@@ -333,10 +338,24 @@ public class Game extends JPanel implements ActionListener {
      * for all aspects of the game
      */
     public void detectCollisions(){
+    	switch (idToStart) {
+		case 1:
+			blasterShots = ship1.getBlasterShots();
+			playerBounds   = ship1.getBounds();
+			break ;
+		case 2:
+			blasterShots = ship2.getBlasterShots();
+			playerBounds   = ship2.getBounds();			break ;
+		case 3:
+			blasterShots = ship3.getBlasterShots();
+			playerBounds   = ship3.getBounds();			break ;
 
-        ArrayList blasterShots = ship1.getBlasterShots();
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + idToStart);
+		}
+        
 
-        Rectangle playerBounds = ship1.getBounds();
+      
 
         ArrayList<Rectangle> enemiesBounds = new ArrayList<Rectangle>();
 
@@ -571,11 +590,24 @@ public class Game extends JPanel implements ActionListener {
 
             background.backgroundMovement();
 
-            if (ship1.isAlive()){
-                shield.moveShield(ship1);
+            if (ship1.isAlive() || ship2.isAlive() || ship3.isAlive()){
+            	switch (idToStart) {
+        		case 1:
+                    shield.moveShield(ship1);
+        			break ;
+        		case 2:
+                    shield.moveShield(ship2);
+        			break ;
+        		case 3:
+                    shield.moveShield(ship3);
+        			break ;
+
+        		default:
+        			throw new IllegalArgumentException("Unexpected value: " + idToStart);
+        		}
             }
 
-            if (ship1.isAlive() || ship2.isAlive() || (ship1.isAlive() && ship2.isAlive())){
+            if (ship1.isAlive() || ship2.isAlive() || ship3.isAlive() || (ship1.isAlive() && ship2.isAlive())){
                 detectCollisions();
                 movePlayerWeapons();
             }
@@ -667,7 +699,21 @@ public class Game extends JPanel implements ActionListener {
      */
     public void movePlayerWeapons(){
         /* blaster shots */
-        ArrayList blasterShots = ship1.getBlasterShots();
+    	switch (idToStart) {
+		case 1:
+			blasterShots = ship1.getBlasterShots();
+			break ;
+		case 2:
+			blasterShots = ship2.getBlasterShots();
+			break ;
+		case 3:
+			blasterShots = ship3.getBlasterShots();
+			break ;
+
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + idToStart);
+		}
+       
         /* if the blaster is visible - move */
         for (int i = 0; i < blasterShots.size(); ++i){
             Blaster temp = (Blaster)blasterShots.get(i);
@@ -778,7 +824,7 @@ public class Game extends JPanel implements ActionListener {
      * Method for drawing weapons in the game
      */
     public void drawWeapons(Graphics2D g2){
-        if (ship1.isAlive()){
+        if (ship1.isAlive() || ship3.isAlive()){
             /* paint blaster beams */
             /* create arraylist to store blaster shots array */
         	shipWeapon.paint(g2);
@@ -836,7 +882,7 @@ public class Game extends JPanel implements ActionListener {
 ////			ship3.paint(g2);
 //			break ;
 			case 3:
-//			ship1.setAlive(false);
+			ship1.setAlive(false);
 			ship3.setAlive(true);
 			ship3.paint(g2);
 			break ;
