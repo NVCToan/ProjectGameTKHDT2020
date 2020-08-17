@@ -122,11 +122,6 @@ public class Game extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e){
         	inputmanager.processKeyPressed(e.getKeyCode());
         }
-        public void resetGame() {
-        	ship1    = new Ship1();
-            isGameLost = false;
-            isGameStarted = true;
-   	}
         
         @Override
         public void keyReleased(KeyEvent e){
@@ -195,8 +190,7 @@ public class Game extends JPanel implements ActionListener {
                     !isGameStarted && menu.isMainMenuActive()){
 
             	menu.setSelectSpace(true);
-//                isGameStarted = true;
-//                playGameSound.play();
+
               
             }
             
@@ -209,11 +203,7 @@ public class Game extends JPanel implements ActionListener {
             	
             }
             
-//            if (mouseX > menu.chooseShip1().x && mouseX < menu.settingsButton().x + menu.settingsButton().width &&
-//                    mouseY > menu.settingsButton().y && mouseY < menu.settingsButton().y + menu.settingsButton().height &&
-//                        !isGameStarted && menu.isMainMenuActive()){
-//
-//             }
+
             
             if (mouseX > menu.settingsButton().x && mouseX < menu.settingsButton().x + menu.settingsButton().width &&
                 mouseY > menu.settingsButton().y && mouseY < menu.settingsButton().y + menu.settingsButton().height &&
@@ -430,7 +420,7 @@ public class Game extends JPanel implements ActionListener {
             }
         }
 
-        if (!ship1.isAlive() && !ship2.isAlive()){
+        if (!ship1.isAlive() || !ship2.isAlive() || !ship3.isAlive() || !ship4.isAlive()){
             isGameLost = true;
         }
 
@@ -472,12 +462,6 @@ public class Game extends JPanel implements ActionListener {
                 	ship1.setWeapon2Laser();
                 }
                 
-//                if (player.isKeyLeft()){
-//                    player.setImage("images/spacecraft-turn-left.png");
-//                }
-//                else if (player.isKeyRight()){
-//                    player.setImage("images/spacecraft-turn-right.png");
-//                }
                 else {
                 	if(superBuff==1) {
                 		
@@ -623,8 +607,8 @@ public class Game extends JPanel implements ActionListener {
             if (!ship3.isAlive()){
             	ship3.moveDeadPlayer();
             }
-            if (!ship3.isAlive()){
-            	ship3.moveDeadPlayer();
+            if (!ship4.isAlive()){
+            	ship4.moveDeadPlayer();
             }
 
 
@@ -997,6 +981,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
 	public void resetGame() {
-		System.out.println("resetgame");
-	}
+		ship1    = new Ship1();
+        isGameLost = false;
+        isGameStarted = true;	}
 }
