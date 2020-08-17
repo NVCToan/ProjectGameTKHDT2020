@@ -99,5 +99,10 @@ public void paint(Graphics2D g2) {
         g2.drawImage(getImage(), getX(), getY(), null);
     }
 }
+@Override
+public void setWeapon2Laser() {
+	// TODO Auto-generated method stub
+	
+}
 
 }

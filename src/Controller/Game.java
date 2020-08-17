@@ -16,9 +16,11 @@ import Model.Blaster;
 import Model.CacheDataLoader;
 import Model.DataConfig;
 import Model.Laser;
+import Model.PlayerShip;
 import Model.Shield;
 import Model.Ship1;
 import Model.Ship2;
+import Model.Ship3;
 import Model.SoundPlayer;
 import Model.SpaceCraft;
 import Model.SpaceCraftWeapon;
@@ -41,9 +43,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game extends JPanel implements ActionListener {
+	private int idToStart = -1;
 	private int superBuff=0;
     private Ship1 ship1;
     private Ship2 ship2;
+    private Ship3 ship3;
     private Shield shield;
     private Image backgroundMenu;
     private Timer time;
@@ -148,7 +152,7 @@ public class Game extends JPanel implements ActionListener {
             }
         }
         public void resetGame() {
-       	 ship1    = new Ship1();
+        	ship1    = new Ship1();
             isGameLost = false;
             isGameStarted = true;
    	}
@@ -236,7 +240,12 @@ public class Game extends JPanel implements ActionListener {
             }
             
             if(menu.isSelectSpace) {
-            	menu.idSpace(mouseX, mouseY);
+            	if(menu.idSpace(mouseX, mouseY) >0) {
+            		idToStart = menu.idSpace(mouseX, mouseY);
+            		 isGameStarted = true;
+            		 playGameSound.play();	
+            	}
+            	
             }
             
 //            if (mouseX > menu.chooseShip1().x && mouseX < menu.settingsButton().x + menu.settingsButton().width &&
@@ -270,8 +279,8 @@ public class Game extends JPanel implements ActionListener {
     }
     public Game(){
         ship1    = new Ship1();
-      
         ship2 = new Ship2();
+        ship3 = new Ship3();
        background = new Background();
        stats = new StatsView();
        shipWeapon = new ShipWeaponView();
@@ -467,7 +476,6 @@ public class Game extends JPanel implements ActionListener {
                 if (ship1.isKeyDown() && ship1.getY() < (screenHeight - 118)){
                 	ship1.moveBack();
                 }
-
                 if (ship1.getBlasterDelay() > 0){
                 	ship1.setBlasterDelay();
                 }
@@ -499,6 +507,39 @@ public class Game extends JPanel implements ActionListener {
                 }
             }
 
+            //ship3
+            
+            if (ship3.isAlive()){
+                if (ship3.isKeyLeft() && ship3.getX() > 20){
+                	ship3.moveLeft();
+                }
+                if (ship3.isKeyRight() && ship3.getX() < (screenWidth - 116)){
+                	ship3.moveRight();
+                }
+                if (ship3.isKeyUp() && ship3.getY() > 20){
+                	ship3.moveForward();
+                }
+                if (ship3.isKeyDown() && ship3.getY() < (screenHeight - 118)){
+                	ship3.moveBack();
+                }
+
+                if (ship3.getBlasterDelay() > 0){
+                	ship3.setBlasterDelay();
+                }
+                if (ship3.getLaserDelay() > 0){
+                	ship3.setLaserDelay();
+                }
+                if (ship3.isFire() && ship3.getBlasterDelay() == 0){
+                	ship3.setWeapon1(new Blaster(ship3.getX(), ship3.getY()));
+
+                }
+                if (!ship3.isFire() && ship3.isSpecialWeapon() && ship3.getLaserDelay() == 0){
+                	ship3.setWeapon2Laser();
+                }
+            
+                
+            }
+            //end ship3
             if (ship2.isAlive()){
                 if (ship2.isKeyLeft() && ship2.getX() > 20){
                 	ship2.moveLeft();
@@ -547,6 +588,8 @@ public class Game extends JPanel implements ActionListener {
             	ship2.moveDeadPlayer();
             }
 
+            
+            
             moveEnemies();
             enemiesFire();
 
@@ -781,28 +824,36 @@ public class Game extends JPanel implements ActionListener {
      * Method for drawing players in the game
      */
     public void drawPlayers(Graphics2D g2){
-    	ship1.paint(g2);
-    	ship2.paint(g2);
+    	System.out.println(idToStart);
+    	switch (idToStart) {
+		case 1:
+			ship3.setAlive(false);
+			ship1.setAlive(true);
+	    	ship1.paint(g2);
+			break ;
+//			case 2:
+////			ship3.setAlive(true);
+////			ship3.paint(g2);
+//			break ;
+			case 3:
+//			ship1.setAlive(false);
+			ship3.setAlive(true);
+			ship3.paint(g2);
+			break ;
+//		case 4:
+//			ship4.paint(g2);
+//			break ;
+
+		default:
+		}
+    
     }
 
     /**
      * Method for drawing game statistics
      */
     public void drawStats(Graphics2D g2){
-//        g.setFont(new Font("SanSerif", Font.BOLD, 20));
-//        g.setColor(Color.GREEN);
-//        g.drawString("PLAYER ONE", screenWidth - 200, 30);
-//        g.drawString("POINTS: " + stats.getPlayerOneScore(), screenWidth - 200, 70);
-//        if (shield.isShieldActive()){
-//            g.drawString("SHIELD: ACTIVE", screenWidth - 200, 100);
-//        } else {
-//            g.drawString("SHIELD: DISABLED", screenWidth - 200, 100);
-//        }
-//        // Player 2
-//        if (ship2.isAlive() || keyTwoCounter > 0){
-//            g.drawString("PLAYER TWO", 5, 30);
-//            g.drawString("POINTS: " + stats.getPlayerTwoScore(), 5, 70);
-//        }
+
     	stats.paint(g2);
     }
 

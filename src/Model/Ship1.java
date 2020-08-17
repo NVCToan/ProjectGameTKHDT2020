@@ -23,7 +23,7 @@ public class Ship1 extends PlayerShip {
         this.moveY = 3;
         this.moveYdead = 2;
 
-        this.isAlive = true;
+        this.isAlive = false;
 
         blasterShots = new ArrayList();
         laserShots   = new ArrayList<Laser>();
@@ -68,8 +68,6 @@ public class Ship1 extends PlayerShip {
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_Q){
 	            	setFire(true); 
-	            	
-
 	        }
 	        if (e.getKeyCode() == KeyEvent.VK_W){
 	            specialWeapon = true;

@@ -42,17 +42,15 @@ public class GameMenu {
 
     public int idSpace(int position_x, int positon_y) {
     	if(400 < position_x && position_x < 502  && 100 < positon_y &&  positon_y < 204 ) {
-    		System.out.println("space 01");
+    		return 1;
     	}
     	if(700 < position_x && position_x < 800  && 100 < positon_y &&  positon_y < 221 ) {
-    		System.out.println("space 02");
+    		return 2;
     	}
     	if(400 < position_x && position_x < 487  && 300 < positon_y &&  positon_y < 404 ) {
-    		System.out.println("space 03");
-    	}
+    		return 3;    	}
     	if(700 < position_x && position_x < 887  && 300 < positon_y &&  positon_y < 404 ) {
-    		System.out.println("space 04");
-    	}
+    		return 4;    	}
     	return -1;
 	}
     

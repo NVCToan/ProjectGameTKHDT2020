@@ -157,5 +157,9 @@ public abstract class PlayerShip {
     /* register when key is released */
     public abstract void keyReleased(KeyEvent e);
 
+	public abstract void setWeapon2Laser();
+
+//	public abstract void paint(Graphics2D g2);
+
        
 }
